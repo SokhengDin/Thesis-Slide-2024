@@ -1,4 +1,40 @@
-.Rproj.user
+# Cache files
+*_cache/
+*_files/
+
+# Temporary files
+*.utf8.md
+*.knit.md
+
+# Output files
+*.html
+*.pdf
+
+# RStudio files
+.Rproj.user/
+*.Rproj
+
+# R environment variables
+.Renviron
+
+# R History files
 .Rhistory
+.Rapp.history
+
+# Session Data files
 .RData
+
+# User-specific files
 .Ruserdata
+
+# Example code in package build process
+*-Ex.R
+
+# Output files from R CMD build
+/*.tar.gz
+
+# Output files from R CMD check
+/*.Rcheck/
+
+# RStudio connect folder
+rsconnect/
