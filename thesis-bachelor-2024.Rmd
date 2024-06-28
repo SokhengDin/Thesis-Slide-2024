@@ -1,0 +1,67 @@
+---
+title: "Model-Based Deep Neural Network to Enhance MPC and MPPI Controller in Dynamics Environment"
+subtitle: "Institute of Technology of Cambodia"
+author: "DIN Sokheng"
+date: "28-June-2024"
+output:
+  xaringan::moon_reader:
+    css: ["default", "style.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+      beforeInit: "https://platform.twitter.com/widgets.js"
+    seal: false
+    includes:
+      in_header: "toc.html"
+---
+
+class: center, middle, title-slide
+
+# Model-Based Deep Neural Network to Enhance MPC and MPPI Controller in Dynamics Environment
+
+## Institute of Technology of Cambodia
+
+### DIN Sokheng
+
+
+#### 28-June-2024
+
+---
+
+# Table of Contents
+.toc[]
+
+
+---
+# Introduction
+
+## Study Background
+## Objective Of Work
+## Scope of Study
+## Thesis Outline
+
+---
+# Design Methodology
+## Model Predictie Control
+## Model Predictive Path Integral
+## Path Constraint Obstacle Avoidance
+## Deep Neural Network
+## Model-Based Deep Neural Network
+---
+
+# Result and Discussion
+## System Model
+## System Identification using each Controller PyBullet Environment
+### Design Deep Neural Network
+## Model Predictive Control with Learned Dyanmcis using Acados
+### Training the Neural Network
+### Compare MPC performance nominal model vs learned model
+## Model Predictive Path Integral Control using PyTorch
+### Training the Neural Network
+### Compare MPPI performance nominal model vs learned model
+---
+
+# Conclusion and Future Work

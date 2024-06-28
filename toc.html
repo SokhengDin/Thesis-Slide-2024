@@ -1,0 +1,76 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+  var generateTOC = function() {
+    var toc = '<ol class="toc-list">';
+    var sectionCount = 0;
+    var subsectionCount = 0;
+    var subsubsectionCount = 0;
+    var currentSection = null;
+    var currentSectionTitle = '';
+    var currentSubsection = null;
+    var currentSubsectionTitle = '';
+
+    $('.remark-slide-content').each(function(index, slide) {
+      var $slide = $(slide);
+      
+      // Skip the title slide and the TOC slide
+      if ($slide.hasClass('title-slide') || $slide.find('h1').text().trim().toLowerCase() === 'table of contents') {
+        return;
+      }
+
+      $slide.find('h1, h2, h3').each(function() {
+        var $header = $(this);
+        var headerText = $header.text().trim();
+
+        if ($header.is('h1')) {
+          sectionCount++;
+          subsectionCount = 0;
+          subsubsectionCount = 0;
+          currentSection = romanize(sectionCount);
+          currentSectionTitle = headerText;
+          
+          toc += '<li><a href="#' + (index + 1) + '">' + 
+                 currentSection + '. ' + currentSectionTitle + '</a></li>';
+          
+          $header.html('<span class="section-number">' + currentSection + '. </span>' + currentSectionTitle);
+        } else if ($header.is('h2')) {
+          subsectionCount++;
+          subsubsectionCount = 0;
+          currentSubsection = subsectionCount;
+          currentSubsectionTitle = headerText;
+          
+          $header.html('<span class="section-number">' + currentSection + '.' + currentSubsection + ' </span>' + currentSubsectionTitle);
+        } else if ($header.is('h3')) {
+          subsubsectionCount++;
+          
+          $header.html('<span class="section-number">' + currentSection + '.' + currentSubsection + '.' + subsubsectionCount + ' </span>' + headerText);
+        }
+      });
+    });
+    
+    toc += '</ol>';
+    $('.toc').html(toc);
+  };
+
+  // Function to convert numbers to Roman numerals
+  function romanize(num) {
+    var lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1},roman = '',i;
+    for (i in lookup) {
+      while (num >= lookup[i]) {
+        roman += i;
+        num -= lookup[i];
+      }
+    }
+    return roman;
+  }
+
+  // Wait for Remark to finish rendering
+  var intervalId = setInterval(function() {
+    if (document.querySelector('.remark-slide-content')) {
+      clearInterval(intervalId);
+      generateTOC();
+    }
+  }, 100);
+});
+</script>

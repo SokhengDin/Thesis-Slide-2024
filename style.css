@@ -1,0 +1,140 @@
+/* Font Setup */
+@font-face {
+  font-family: 'Times New Roman';
+  src: local('Times New Roman'), local('TimesNewRoman');
+}
+
+/* Common styles */
+body {
+  font-family: 'Times New Roman', Times, serif;
+}
+
+/* Title slide styles */
+.title-slide {
+  background-color: white;
+  padding-top: 140px !important;
+}
+
+.title-slide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 175px;
+  background-color: white;
+  background-image: 
+    url('images/moey_logo.svg'),
+    url('images/itc_logo.png');
+  background-position: 
+    left 60px center,
+    right 60px center;
+  background-size: auto 150px;
+  background-repeat: no-repeat;
+  border-bottom: 2px solid #1a5173;
+}
+
+.title-slide::after {
+  content: 'Institute of Technology of Cambodia <br>  Department of Electrical and Energy Engineering';
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 28px;
+  font-weight: bold;
+  color: #1a5173;
+}
+
+.title-slide h1 {
+  font-size: 36px;
+  color: #1A292C;
+  margin-top: 60px;
+}
+
+.title-slide h2, .title-slide h3 {
+  font-size: 28px;
+  color: #5F5F5F;
+}
+
+/* Content slide styles */
+.remark-slide-content:not(.title-slide) {
+  padding-top: 80px;
+}
+
+.remark-slide-content:not(.title-slide)::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background-color: white;
+  border-bottom: 2px solid #1a5173;
+}
+
+.remark-slide-content:not(.title-slide)::after {
+  content: 'Institute of Technology of Cambodia';
+  position: absolute;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  font-weight: bold;
+  color: #1a5173;
+}
+
+/* Other custom styles */
+.remark-slide-content {
+  font-size: 24px;
+  padding: 1em 4em 1em 4em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+  margin-top: 10px;
+  margin-bottom: 40px;
+}
+
+/* Table of contents */
+.toc-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.toc-list li {
+  margin-bottom: 20px;
+}
+
+.toc-list a {
+  font-weight: bold;
+  color: #1a5173;
+  text-decoration: none;
+}
+
+/* Slide content styles */
+.remark-slide-content h1 {
+  font-size: 36px;
+  margin-bottom: 0.5em;
+}
+.remark-slide-content h2 {
+  font-size: 28px;
+  margin-bottom: 0.5em;
+}
+
+.remark-slide-content h3 {
+  font-size: 24px;
+  margin-bottom: 0.5em;
+}
+
+.remark-slide-content .section-number {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.remark-slide-content h2 {
+  margin-left: 1em;
+}
+
+.remark-slide-content h3 {
+  margin-left: 2em;
+}

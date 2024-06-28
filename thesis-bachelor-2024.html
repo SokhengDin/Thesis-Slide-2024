@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Model-Based Deep Neural Network to Enhance MPC and MPPI Controller in Dynamics Environment</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="DIN Sokheng" />
+    <script src="libs/header-attrs-2.27/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+      var generateTOC = function() {
+        var toc = '<ol class="toc-list">';
+        var sectionCount = 0;
+        var subsectionCount = 0;
+        var subsubsectionCount = 0;
+        var currentSection = null;
+        var currentSectionTitle = '';
+        var currentSubsection = null;
+        var currentSubsectionTitle = '';
+
+        $('.remark-slide-content').each(function(index, slide) {
+          var $slide = $(slide);
+          
+          // Skip the title slide and the TOC slide
+          if ($slide.hasClass('title-slide') || $slide.find('h1').text().trim().toLowerCase() === 'table of contents') {
+            return;
+          }
+
+          $slide.find('h1, h2, h3').each(function() {
+            var $header = $(this);
+            var headerText = $header.text().trim();
+
+            if ($header.is('h1')) {
+              sectionCount++;
+              subsectionCount = 0;
+              subsubsectionCount = 0;
+              currentSection = romanize(sectionCount);
+              currentSectionTitle = headerText;
+              
+              toc += '<li><a href="#' + (index + 1) + '">' + 
+                     currentSection + '. ' + currentSectionTitle + '</a></li>';
+              
+              $header.html('<span class="section-number">' + currentSection + '. </span>' + currentSectionTitle);
+            } else if ($header.is('h2')) {
+              subsectionCount++;
+              subsubsectionCount = 0;
+              currentSubsection = subsectionCount;
+              currentSubsectionTitle = headerText;
+              
+              $header.html('<span class="section-number">' + currentSection + '.' + currentSubsection + ' </span>' + currentSubsectionTitle);
+            } else if ($header.is('h3')) {
+              subsubsectionCount++;
+              
+              $header.html('<span class="section-number">' + currentSection + '.' + currentSubsection + '.' + subsubsectionCount + ' </span>' + headerText);
+            }
+          });
+        });
+        
+        toc += '</ol>';
+        $('.toc').html(toc);
+      };
+
+      // Function to convert numbers to Roman numerals
+      function romanize(num) {
+        var lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1},roman = '',i;
+        for (i in lookup) {
+          while (num >= lookup[i]) {
+            roman += i;
+            num -= lookup[i];
+          }
+        }
+        return roman;
+      }
+
+      // Wait for Remark to finish rendering
+      var intervalId = setInterval(function() {
+        if (document.querySelector('.remark-slide-content')) {
+          clearInterval(intervalId);
+          generateTOC();
+        }
+      }, 100);
+    });
+    </script>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: center, middle, title-slide
+
+# Model-Based Deep Neural Network to Enhance MPC and MPPI Controller in Dynamics Environment
+
+## Institute of Technology of Cambodia
+
+### DIN Sokheng
+
+
+#### 28-June-2024
+
+---
+
+# Table of Contents
+.toc[]
+
+
+---
+# Introduction
+
+## Study Background
+## Objective Of Work
+## Scope of Study
+## Thesis Outline
+
+---
+# Design Methodology
+## Model Predictie Control
+## Model Predictive Path Integral
+## Path Constraint Obstacle Avoidance
+## Deep Neural Network
+## Model-Based Deep Neural Network
+---
+
+# Result and Discussion
+## System Model
+## System Identification using each Controller PyBullet Environment
+### Design Deep Neural Network
+## Model Predictive Control with Learned Dyanmcis using Acados
+### Training the Neural Network
+### Compare MPC performance nominal model vs learned model
+## Model Predictive Path Integral Control using PyTorch
+### Training the Neural Network
+### Compare MPPI performance nominal model vs learned model
+---
+
+# Conclusion and Future Work
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
