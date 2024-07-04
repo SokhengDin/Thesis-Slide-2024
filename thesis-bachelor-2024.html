@@ -12,13 +12,6 @@
       var generateTOC = function() {
         var toc = '<ol class="toc-list">';
         var sectionCount = 0;
-        var subsectionCount = 0;
-        var subsubsectionCount = 0;
-        var currentSection = null;
-        var currentSectionTitle = '';
-        var currentSubsection = null;
-        var currentSubsectionTitle = '';
-
         $('.remark-slide-content').each(function(index, slide) {
           var $slide = $(slide);
           
@@ -26,39 +19,46 @@
           if ($slide.hasClass('title-slide') || $slide.find('h1').text().trim().toLowerCase() === 'table of contents') {
             return;
           }
-
-          $slide.find('h1, h2, h3').each(function() {
+          $slide.find('h1').each(function() {
             var $header = $(this);
             var headerText = $header.text().trim();
-
-            if ($header.is('h1')) {
-              sectionCount++;
-              subsectionCount = 0;
-              subsubsectionCount = 0;
-              currentSection = romanize(sectionCount);
-              currentSectionTitle = headerText;
-              
-              toc += '<li><a href="#' + (index + 1) + '">' + 
-                     currentSection + '. ' + currentSectionTitle + '</a></li>';
-              
-              $header.html('<span class="section-number">' + currentSection + '. </span>' + currentSectionTitle);
-            } else if ($header.is('h2')) {
-              subsectionCount++;
-              subsubsectionCount = 0;
-              currentSubsection = subsectionCount;
-              currentSubsectionTitle = headerText;
-              
-              $header.html('<span class="section-number">' + currentSection + '.' + currentSubsection + ' </span>' + currentSubsectionTitle);
-            } else if ($header.is('h3')) {
-              subsubsectionCount++;
-              
-              $header.html('<span class="section-number">' + currentSection + '.' + currentSubsection + '.' + subsubsectionCount + ' </span>' + headerText);
-            }
+            sectionCount++;
+            
+            toc += '<li><a href="#' + (index + 1) + '">' + 
+                   romanize(sectionCount) + '. ' + headerText + '</a></li>';
           });
         });
         
         toc += '</ol>';
         $('.toc').html(toc);
+      };
+
+      var updateSlideNumbers = function() {
+        var sectionCount = 0;
+        var subsectionCount = 0;
+        var currentSectionTitle = '';
+        $('.remark-slide-content').each(function(index, slide) {
+          var $slide = $(slide);
+          
+          // Skip the title slide and the TOC slide
+          if ($slide.hasClass('title-slide') || $slide.find('h1').text().trim().toLowerCase() === 'table of contents') {
+            return;
+          }
+          $slide.find('h1, h2').each(function() {
+            var $header = $(this);
+            var headerText = $header.text().trim();
+            if ($header.is('h1')) {
+              sectionCount++;
+              subsectionCount = 0;
+              currentSectionTitle = headerText;
+              $header.html('<span class="section-number">' + romanize(sectionCount) + '. </span>' + headerText);
+            } else if ($header.is('h2')) {
+              subsectionCount++;
+              $header.before('<h1 class="parent-section"><span class="section-number">' + romanize(sectionCount) + '. </span>' + currentSectionTitle + '</h1>');
+              $header.html('<span class="section-number">' + subsectionCount + '. </span>' + headerText);
+            }
+          });
+        });
       };
 
       // Function to convert numbers to Roman numerals
@@ -78,6 +78,7 @@
         if (document.querySelector('.remark-slide-content')) {
           clearInterval(intervalId);
           generateTOC();
+          updateSlideNumbers();
         }
       }, 100);
     });
@@ -92,12 +93,11 @@ class: center, middle, title-slide
 
 # Model-Based Deep Neural Network to Enhance MPC and MPPI Controller in Dynamics Environment
 
-## Institute of Technology of Cambodia
+.department[Department of Electrical and Energy Engineering]
 
-### DIN Sokheng
-
-
-#### 28-June-2024
+.advisor[SENG Theara]
+.author[DIN Sokheng]
+.date[28-June-2024]
 
 ---
 
@@ -107,9 +107,15 @@ class: center, middle, title-slide
 
 ---
 # Introduction
-
+Recently, Artificial Intelligence(AI) has gained momentum in the daily basis usage in real-world application with Robotics being one of the primary areas of focus when we talk about Artificial Intelligence. Deep Neural Networks(DNNs) are particularly efficient with in solving data-driven problems. They work by processing a diverse stream of data and fitting it into an optimization problem to uncover hidden patterns within the data. 
+---
 ## Study Background
+In Robotics, a common challenge is dealing with the uncertainty of mathematical methods, especially in unknown, real-time environments . This uncertainty can compromise even the most advanced control algorithms that rely solely on the original system model, rather than the actual model encountered in practice. To address this issue,  mainly recent innovations involve integrating DNNs to discover a hidden parameter of model trained based on real-world data. This model is then combined with the original system to significantly enhance accuracy in complex and dynamics environments.
+
+---
 ## Objective Of Work
+The primary objective of this work is to enhance the accuracy of Model Predictive Control (MPC) algorithms and Model Predictive Path Integral (MPPI) in environments with unknown parameters and dynamic obstacles. This will be achieved by implementing deep learning techniques. The MPC will utilize the Acados library to solve the Nonlinear Optimization Problem (NLP), while the MPPI will be based on the methodologies described in the original paper \cite{williams2017information}. The PyBullet will be used as a simulation environment by setting the friction, gravitational force and dynamics response from the differential drive robot that defined in the URDF format.
+
 ## Scope of Study
 ## Thesis Outline
 

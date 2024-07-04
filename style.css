@@ -35,7 +35,7 @@ body {
 }
 
 .title-slide::after {
-  content: 'Institute of Technology of Cambodia <br>  Department of Electrical and Energy Engineering';
+  content: 'Institute of Technology of Cambodia';
   position: absolute;
   top: 50px;
   left: 50%;
@@ -43,6 +43,42 @@ body {
   font-size: 28px;
   font-weight: bold;
   color: #1a5173;
+}
+
+.title-slide .department {
+  content: 'Department of Electrical and Energy Engineering';
+  position: absolute;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  color: #1a5173;
+  text-align: center;
+  width: 100%;
+}
+
+.title-slide .author,
+.title-slide .advisor,
+.title-slide .date {
+  font-size: 24px;
+  color: #5F5F5F;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.title-slide .author::before {
+  content: "Name: ";
+  font-weight: bold;
+}
+
+.title-slide .advisor::before {
+  content: "Advisor Name: ";
+  font-weight: bold;
+}
+
+.title-slide .date::before {
+  content: "Date: ";
+  font-weight: bold;
 }
 
 .title-slide h1 {
@@ -114,15 +150,18 @@ h1, h2, h3, h4, h5, h6 {
 /* Slide content styles */
 .remark-slide-content h1 {
   font-size: 36px;
+  color: #1a5173;
   margin-bottom: 0.5em;
 }
 .remark-slide-content h2 {
   font-size: 28px;
+  color: #1a5173;
   margin-bottom: 0.5em;
 }
 
 .remark-slide-content h3 {
   font-size: 24px;
+  color: #1a5173;
   margin-bottom: 0.5em;
 }
 

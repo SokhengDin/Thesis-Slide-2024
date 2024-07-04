@@ -4,13 +4,6 @@ $(document).ready(function() {
   var generateTOC = function() {
     var toc = '<ol class="toc-list">';
     var sectionCount = 0;
-    var subsectionCount = 0;
-    var subsubsectionCount = 0;
-    var currentSection = null;
-    var currentSectionTitle = '';
-    var currentSubsection = null;
-    var currentSubsectionTitle = '';
-
     $('.remark-slide-content').each(function(index, slide) {
       var $slide = $(slide);
       
@@ -18,39 +11,46 @@ $(document).ready(function() {
       if ($slide.hasClass('title-slide') || $slide.find('h1').text().trim().toLowerCase() === 'table of contents') {
         return;
       }
-
-      $slide.find('h1, h2, h3').each(function() {
+      $slide.find('h1').each(function() {
         var $header = $(this);
         var headerText = $header.text().trim();
-
-        if ($header.is('h1')) {
-          sectionCount++;
-          subsectionCount = 0;
-          subsubsectionCount = 0;
-          currentSection = romanize(sectionCount);
-          currentSectionTitle = headerText;
-          
-          toc += '<li><a href="#' + (index + 1) + '">' + 
-                 currentSection + '. ' + currentSectionTitle + '</a></li>';
-          
-          $header.html('<span class="section-number">' + currentSection + '. </span>' + currentSectionTitle);
-        } else if ($header.is('h2')) {
-          subsectionCount++;
-          subsubsectionCount = 0;
-          currentSubsection = subsectionCount;
-          currentSubsectionTitle = headerText;
-          
-          $header.html('<span class="section-number">' + currentSection + '.' + currentSubsection + ' </span>' + currentSubsectionTitle);
-        } else if ($header.is('h3')) {
-          subsubsectionCount++;
-          
-          $header.html('<span class="section-number">' + currentSection + '.' + currentSubsection + '.' + subsubsectionCount + ' </span>' + headerText);
-        }
+        sectionCount++;
+        
+        toc += '<li><a href="#' + (index + 1) + '">' + 
+               romanize(sectionCount) + '. ' + headerText + '</a></li>';
       });
     });
     
     toc += '</ol>';
     $('.toc').html(toc);
+  };
+
+  var updateSlideNumbers = function() {
+    var sectionCount = 0;
+    var subsectionCount = 0;
+    var currentSectionTitle = '';
+    $('.remark-slide-content').each(function(index, slide) {
+      var $slide = $(slide);
+      
+      // Skip the title slide and the TOC slide
+      if ($slide.hasClass('title-slide') || $slide.find('h1').text().trim().toLowerCase() === 'table of contents') {
+        return;
+      }
+      $slide.find('h1, h2').each(function() {
+        var $header = $(this);
+        var headerText = $header.text().trim();
+        if ($header.is('h1')) {
+          sectionCount++;
+          subsectionCount = 0;
+          currentSectionTitle = headerText;
+          $header.html('<span class="section-number">' + romanize(sectionCount) + '. </span>' + headerText);
+        } else if ($header.is('h2')) {
+          subsectionCount++;
+          $header.before('<h1 class="parent-section"><span class="section-number">' + romanize(sectionCount) + '. </span>' + currentSectionTitle + '</h1>');
+          $header.html('<span class="section-number">' + subsectionCount + '. </span>' + headerText);
+        }
+      });
+    });
   };
 
   // Function to convert numbers to Roman numerals
@@ -70,6 +70,7 @@ $(document).ready(function() {
     if (document.querySelector('.remark-slide-content')) {
       clearInterval(intervalId);
       generateTOC();
+      updateSlideNumbers();
     }
   }, 100);
 });
