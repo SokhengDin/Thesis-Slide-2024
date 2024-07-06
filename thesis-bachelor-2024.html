@@ -108,20 +108,21 @@ class: center, middle, title-slide
 
 ---
 # Introduction
-Recently, Artificial Intelligence (AI) has gained momentum in daily usage in real-world applications, with Robotics being one of the primary areas of focus when we talk about Artificial Intelligence. Deep Neural Networks (DNNs) are particularly efficient in solving data-driven problems. They work by processing a diverse stream of data and fitting it into an optimization problem to uncover hidden patterns within the data. Recent research has shown that DNNs can be effectively used as add-on modules to enhance robot performance in trajectory tracking tasks Zhou, Helwa, and Schoellig (2020).
+Recently, Artificial Intelligence (AI) has gained momentum in daily usage in real-world applications, with Robotics being one of the primary areas of focus when we talk about Artificial Intelligence.
+
+---
+## Study Background
+Deep Neural Networks (DNNs) are particularly efficient in solving data-driven problems. They work by processing a diverse stream of data and fitting it into an optimization problem to uncover hidden patterns within the data. Recent research has shown that DNNs can be effectively used as add-on modules to enhance robot performance in trajectory tracking tasks Zhou, Helwa, and Schoellig (2020).
+
+---
+## Objective Of Work
+The primary objective of this work is to enhance the accuracy of Model Predictive Control (MPC) algorithms and Model Predictive Path Integral (MPPI) in environments with unknown parameters and dynamic obstacles. This can be archeive by adding Deep Neural Network to improve it.
+
 
 
 &lt;div style="text-align: center;"&gt;
   &lt;img src="images/thesis_diragram_intro.png" alt="Thesis Diagram" style="width: auto; height: 350px;"&gt;
 &lt;/div&gt;
-
----
-## Study Background
-In Robotics, a common challenge is dealing with the uncertainty of mathematical methods, especially in unknown, real-time environments . This uncertainty can compromise even the most advanced control algorithms that rely solely on the original system model, rather than the actual model encountered in practice. To address this issue,  mainly recent innovations involve integrating DNNs to discover a hidden parameter of model trained based on real-world data. This model is then combined with the original system to significantly enhance accuracy in complex and dynamics environments.
-
----
-## Objective Of Work
-The primary objective of this work is to enhance the accuracy of Model Predictive Control (MPC) algorithms and Model Predictive Path Integral (MPPI) in environments with unknown parameters and dynamic obstacles. This will be achieved by implementing deep learning techniques. The MPC will utilize the Acados library to solve the Nonlinear Optimization Problem (NLP), while the MPPI will be based on the methodologies described in the original paper \cite{williams2017information}. The PyBullet will be used as a simulation environment by setting the friction, gravitational force and dynamics response from the differential drive robot that defined in the URDF format.
 ---
 ## Scope of Study
 The scope of this study include:
@@ -134,10 +135,10 @@ The scope of this study include:
 ---
 ## Thesis Outline
 This thesis is organized as follows:
-+ Chapter 1: Introduction}Study Background, Objective of Work, Scope of Study and Thesis Outline
-+ Chapter 2: Design Methodology Model Predictive Control, Model Predictive Path Integral, Deep Neural Network and Model-Based Deep Neural Network
-+ Chapter 3: Result and Discussion} System Model, System Identification using each controller in Pybullet, Model Predictive Control With Learned Dynamics and Model Path Predictive Integral Control with GPU Accelerate using PyTorch and Learned Dynamics.
-+ Chapter 4: In Conclusion and Future Work
++ **Chapter 1**: Introduction}Study Background, Objective of Work, Scope of Study and Thesis Outline
++ **Chapter 2**: Design Methodology Model Predictive Control, Model Predictive Path Integral, Deep Neural Network and Model-Based Deep Neural Network
++ **Chapter 3**: Result and Discussion} System Model, System Identification using each controller in Pybullet, Model Predictive Control With Learned Dynamics and Model Path Predictive Integral Control with GPU Accelerate using PyTorch and Learned Dynamics.
++ **Chapter 4**: In Conclusion and Future Work
 ---
 # Design Methodology
 ---
