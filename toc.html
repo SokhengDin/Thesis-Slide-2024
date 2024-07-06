@@ -1,34 +1,47 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/1.58.4/plotly.min.js"></script>
 <script>
 $(document).ready(function() {
-  var generateTOC = function() {
-    var toc = '<ol class="toc-list">';
-    var sectionCount = 0;
-    $('.remark-slide-content').each(function(index, slide) {
-      var $slide = $(slide);
-      
-      // Skip the title slide and the TOC slide
-      if ($slide.hasClass('title-slide') || $slide.find('h1').text().trim().toLowerCase() === 'table of contents') {
-        return;
-      }
-      $slide.find('h1').each(function() {
-        var $header = $(this);
-        var headerText = $header.text().trim();
-        sectionCount++;
-        
-        toc += '<li><a href="#' + (index + 1) + '">' + 
-               romanize(sectionCount) + '. ' + headerText + '</a></li>';
-      });
-    });
+var generateTOC = function() {
+  var toc = '<ol class="toc-list">';
+  var sectionCount = 0;
+  var prevSectionTitle = '';
+
+  $('.remark-slide-content').each(function(index, slide) {
+    var $slide = $(slide);
     
-    toc += '</ol>';
-    $('.toc').html(toc);
-  };
+    // Skip the title slide and the TOC slide
+    if ($slide.hasClass('title-slide') || $slide.find('h1').text().trim().toLowerCase() === 'table of contents') {
+      return;
+    }
+
+    $slide.find('h1').each(function() {
+      var $header = $(this);
+      var headerText = $header.text().trim();
+      var sectionTitle = headerText.replace(/^[IVX]+\.\s*/, '');
+
+      if (sectionTitle !== prevSectionTitle) {
+        sectionCount++;
+        prevSectionTitle = sectionTitle;
+        toc += '<li><a href="#' + (index + 1) + '">' + 
+               romanize(sectionCount) + '. ' + sectionTitle + '</a></li>';
+      }
+    });
+  });
+  
+  toc += '</ol>';
+  $('.toc').html(toc);
+};
   
   var updateSlideNumbers = function() {
     var sectionCount = 0;
     var subsectionCount = 0;
+    var subsubsectionCount = 0;
     var currentSectionTitle = '';
+    var currentSectionNumber = '';
+    var currentSubsectionTitle = '';
+    var currentSubsubsectionTitle = '';
+    
     $('.remark-slide-content').each(function(index, slide) {
       var $slide = $(slide);
       
@@ -36,22 +49,58 @@ $(document).ready(function() {
       if ($slide.hasClass('title-slide') || $slide.find('h1').text().trim().toLowerCase() === 'table of contents') {
         return;
       }
-      $slide.find('h1, h2').each(function() {
-        var $header = $(this);
-        var headerText = $header.text().trim();
-        if ($header.is('h1')) {
-          sectionCount++;
-          subsectionCount = 0;
-          currentSectionTitle = headerText;
-          $header.html('<span class="section-number">' + romanize(sectionCount) + '. </span>' + headerText);
-        } else if ($header.is('h2')) {
-          subsectionCount++;
-          if (!$header.prev().is('h1')) {
-            $header.before('<h1 class="parent-section"><span class="section-number">' + romanize(sectionCount) + '. </span>' + currentSectionTitle + '</h1>');
+      
+      var $headers = $slide.find('h1, h2, h3');
+      if ($headers.length === 0) {
+        // If no headers, add the current section, subsection, and subsubsection titles
+        if (currentSectionTitle) {
+          if (currentSubsubsectionTitle) {
+            $slide.prepend('<h3 class="current-subsubsection"><span class="subsubsection-number">' + subsubsectionCount + '. </span>' + currentSubsubsectionTitle + '</h3>');
           }
-          $header.html('<span class="section-number">' + subsectionCount + '. </span>' + headerText);
+          if (currentSubsectionTitle) {
+            $slide.prepend('<h2 class="current-subsection"><span class="subsection-number">' + subsectionCount + '. </span>' + currentSubsectionTitle + '</h2>');
+          }
+          $slide.prepend('<h1 class="parent-section"><span class="section-number">' + currentSectionNumber + ' </span>' + currentSectionTitle + '</h1>');
         }
-      });
+      } else {
+        $headers.each(function() {
+          var $header = $(this);
+          var headerText = $header.text().trim();
+          if ($header.is('h1')) {
+            sectionCount++;
+            subsectionCount = 0;
+            subsubsectionCount = 0;
+            currentSectionTitle = headerText;
+            currentSectionNumber = romanize(sectionCount) + '.';
+            currentSubsectionTitle = '';
+            currentSubsubsectionTitle = '';
+            $header.html('<span class="section-number">' + currentSectionNumber + ' </span>' + headerText);
+          } else if ($header.is('h2')) {
+            subsectionCount++;
+            subsubsectionCount = 0;
+            currentSubsectionTitle = headerText;
+            currentSubsubsectionTitle = '';
+            if (!$header.prev().is('h1')) {
+              $header.before('<h1 class="parent-section"><span class="section-number">' + currentSectionNumber + ' </span>' + currentSectionTitle + '</h1>');
+            }
+            $header.html('<span class="subsection-number">' + subsectionCount + '. </span>' + headerText);
+          } else if ($header.is('h3')) {
+            subsubsectionCount++;
+            currentSubsubsectionTitle = headerText;
+            if (!$header.prev().is('h2')) {
+              $header.before('<h2 class="parent-subsection"><span class="subsection-number">' + subsectionCount + '. </span>' + currentSubsectionTitle + '</h2>');
+            }
+            if (!$header.prev().prev().is('h1')) {
+              $header.before('<h1 class="parent-section"><span class="section-number">' + currentSectionNumber + ' </span>' + currentSectionTitle + '</h1>');
+            }
+            $header.html('<span class="subsubsection-number">' + subsubsectionCount + '. </span>' + headerText);
+          }
+        });
+      }
+      
+      // Move all content after the headers
+      var $content = $slide.contents().not('h1, h2, h3').detach();
+      $slide.append($content);
     });
   };
   
@@ -71,8 +120,8 @@ $(document).ready(function() {
   var intervalId = setInterval(function() {
     if (document.querySelector('.remark-slide-content')) {
       clearInterval(intervalId);
-      generateTOC();
       updateSlideNumbers();
+      generateTOC();
     }
   }, 100);
 });

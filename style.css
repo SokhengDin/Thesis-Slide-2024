@@ -15,6 +15,27 @@ body {
   padding-top: 140px !important;
 }
 
+.container {
+    display: flex;
+    align-items: flex-start;
+  }
+  .equation {
+    flex: 1;
+    padding-right: 10px;
+  }
+  .figure {
+    flex: 1;
+    text-align: center;
+  }
+  .caption {
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+.parent-section, .current-subsection, .current-subsubsection {
+  display: block; /* or adjust as needed */
+}
+
 .title-slide::before {
   content: '';
   position: absolute;
@@ -34,10 +55,23 @@ body {
   border-bottom: 2px solid #1a5173;
 }
 
+.title-slide .ministry {
+  content: 'Ministry of Education Youth and Sport';
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 30px;
+  font-weight: bold;
+  color: #1a5173;
+  text-align: center;
+  width: 100%;
+}
+
 .title-slide::after {
   content: 'Institute of Technology of Cambodia';
   position: absolute;
-  top: 50px;
+  top: 70px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 28px;
@@ -48,10 +82,11 @@ body {
 .title-slide .department {
   content: 'Department of Electrical and Energy Engineering';
   position: absolute;
-  top: 90px;
+  top: 110px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 24px;
+  font-weight: bold;
   color: #1a5173;
   text-align: center;
   width: 100%;
