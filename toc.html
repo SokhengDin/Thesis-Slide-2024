@@ -24,7 +24,7 @@ $(document).ready(function() {
     toc += '</ol>';
     $('.toc').html(toc);
   };
-
+  
   var updateSlideNumbers = function() {
     var sectionCount = 0;
     var subsectionCount = 0;
@@ -46,13 +46,15 @@ $(document).ready(function() {
           $header.html('<span class="section-number">' + romanize(sectionCount) + '. </span>' + headerText);
         } else if ($header.is('h2')) {
           subsectionCount++;
-          $header.before('<h1 class="parent-section"><span class="section-number">' + romanize(sectionCount) + '. </span>' + currentSectionTitle + '</h1>');
+          if (!$header.prev().is('h1')) {
+            $header.before('<h1 class="parent-section"><span class="section-number">' + romanize(sectionCount) + '. </span>' + currentSectionTitle + '</h1>');
+          }
           $header.html('<span class="section-number">' + subsectionCount + '. </span>' + headerText);
         }
       });
     });
   };
-
+  
   // Function to convert numbers to Roman numerals
   function romanize(num) {
     var lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1},roman = '',i;
@@ -64,7 +66,7 @@ $(document).ready(function() {
     }
     return roman;
   }
-
+  
   // Wait for Remark to finish rendering
   var intervalId = setInterval(function() {
     if (document.querySelector('.remark-slide-content')) {

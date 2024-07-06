@@ -63,9 +63,6 @@ class: center, middle, title-slide
 
 ---
 # Introduction
-Recently, Artificial Intelligence (AI) has gained momentum in daily usage in real-world applications, with Robotics being one of the primary areas of focus when we talk about Artificial Intelligence.
-
----
 ## Study Background
 Deep Neural Networks (DNNs) are particularly efficient in solving data-driven problems. They work by processing a diverse stream of data and fitting it into an optimization problem to uncover hidden patterns within the data. Recent research has shown that DNNs can be effectively used as add-on modules to enhance robot performance in trajectory tracking tasks `r Citet(bib, "zhou2020deep")`.
 
@@ -96,7 +93,6 @@ This thesis is organized as follows:
 + **Chapter 4**: In Conclusion and Future Work
 ---
 # Design Methodology
----
 ## Model Predictie Control
 ---
 ## Model Predictive Path Integral

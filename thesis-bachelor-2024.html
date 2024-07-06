@@ -32,7 +32,7 @@
         toc += '</ol>';
         $('.toc').html(toc);
       };
-
+      
       var updateSlideNumbers = function() {
         var sectionCount = 0;
         var subsectionCount = 0;
@@ -54,13 +54,15 @@
               $header.html('<span class="section-number">' + romanize(sectionCount) + '. </span>' + headerText);
             } else if ($header.is('h2')) {
               subsectionCount++;
-              $header.before('<h1 class="parent-section"><span class="section-number">' + romanize(sectionCount) + '. </span>' + currentSectionTitle + '</h1>');
+              if (!$header.prev().is('h1')) {
+                $header.before('<h1 class="parent-section"><span class="section-number">' + romanize(sectionCount) + '. </span>' + currentSectionTitle + '</h1>');
+              }
               $header.html('<span class="section-number">' + subsectionCount + '. </span>' + headerText);
             }
           });
         });
       };
-
+      
       // Function to convert numbers to Roman numerals
       function romanize(num) {
         var lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1},roman = '',i;
@@ -72,7 +74,7 @@
         }
         return roman;
       }
-
+      
       // Wait for Remark to finish rendering
       var intervalId = setInterval(function() {
         if (document.querySelector('.remark-slide-content')) {
@@ -108,9 +110,6 @@ class: center, middle, title-slide
 
 ---
 # Introduction
-Recently, Artificial Intelligence (AI) has gained momentum in daily usage in real-world applications, with Robotics being one of the primary areas of focus when we talk about Artificial Intelligence.
-
----
 ## Study Background
 Deep Neural Networks (DNNs) are particularly efficient in solving data-driven problems. They work by processing a diverse stream of data and fitting it into an optimization problem to uncover hidden patterns within the data. Recent research has shown that DNNs can be effectively used as add-on modules to enhance robot performance in trajectory tracking tasks Zhou, Helwa, and Schoellig (2020).
 
@@ -141,7 +140,6 @@ This thesis is organized as follows:
 + **Chapter 4**: In Conclusion and Future Work
 ---
 # Design Methodology
----
 ## Model Predictie Control
 ---
 ## Model Predictive Path Integral
