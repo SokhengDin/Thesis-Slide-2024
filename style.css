@@ -31,8 +31,6 @@ body {
     margin-top: 10px;
     font-style: italic;
   }
-  
-  
 
 .parent-section, .current-subsection, .current-subsubsection {
   display: block; /* or adjust as needed */
