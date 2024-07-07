@@ -368,7 +368,7 @@ In control system, basically we have a general mathematics model of the system t
 ---
 ## Stage of Concatenating Residual Dynamics
 <div style="text-align: center;">
-  <img src="images/learned_sys.png" alt="Diagram of System concatenating stage" style="width: auto; height: 400px;">
+  <img src="images/learned_sys.png" alt="Diagram of System concatenating stage" style="width: auto; height: 350px;">
   <p style="text-align: center; font-style: italic;">Figure 2.9 Diagram of System concatenating stage .</p>
 </div>
 ---
