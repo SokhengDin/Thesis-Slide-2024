@@ -36,6 +36,15 @@ body {
   display: block; /* or adjust as needed */
 }
 
+.video-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.video-wrapper {
+  flex: 0 0 48%; /* Adjust this value to change the spacing between videos */
+}
+
 .title-slide::before {
   content: '';
   position: absolute;
