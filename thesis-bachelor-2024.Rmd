@@ -19,6 +19,13 @@ output:
     seal: false
     includes:
       in_header: "toc.html"
+    powerpoint_presentation:
+    reference_doc: thesis_2024.pptx
+    slide_level: 2
+    fig_caption: true
+    keep_md: true
+    pandoc_args: 
+      - "--slide-level=2"
       
 ---
 ```{r setup, include=FALSE}
@@ -31,10 +38,11 @@ install_and_load <- function(package) {
 }
 library(plotly)
 library(deSolve)
+
 if (!require(reticulate)) install.packages("reticulate")
 
 library(reticulate)
-
+library(kableExtra)
 # Install and load necessary package
 
 if (!require(plotly)) install.packages("plotly")
@@ -48,6 +56,29 @@ np <- import("numpy")
 # Read the .npy files
 control_inputs_dnn <- np$load("slide_data/control_inputs_dnn.npy")
 control_inputs <- np$load("slide_data/control_inputs.npy")
+
+split_bib <- function(bib, chunk_size = 5) {
+  total_refs <- length(bib)
+  chunks <- ceiling(total_refs / chunk_size)
+  
+  for (i in 1:chunks) {
+    start <- (i-1) * chunk_size + 1
+    end <- min(i * chunk_size, total_refs)
+    
+    if (i == 1) {
+
+    } else {
+      cat("\n---\n\n")
+    }
+    
+    for (j in start:end) {
+      entry <- bib[j]
+      cat(sprintf("[%d] ", j))
+      print(entry, .opts = list(bib.style = "numeric", style = "text"))
+      cat("\n\n")
+    }
+  }
+}
 
 # Read bibliography
 bib <- tryCatch(
@@ -415,79 +446,215 @@ PyBullet is a widely recognized framework among AI, robotics, and control resear
   <img src="images/bullet_sim.png" alt="Robot Arm 5DOF inside Pybullet with depth and semantic camera" style="width: auto; height: 250px;">
   <p style="text-align: center; font-style: italic;">Figure 2.10 Robot Arm 5DOF inside Pybullet with depth and semantic camera .</p>
 </div>
+
 ---
 # Result and Discussion
-```{r control-inputs-comparison, fig.width=10, fig.height=6, echo=FALSE, message=FALSE, warning=FALSE}
-library(plotly)
-
-# Assuming the .npy files contain 2D arrays where each row is a time step
-# and each column is a different control input
-
-# Create a sequence for the x-axis (time steps)
-time_steps <- seq_len(nrow(control_inputs))
-
-# Create the plot
-plot <- plot_ly()
-
-# Add traces for control_inputs
-for (i in 1:ncol(control_inputs)) {
-  plot <- plot %>% add_trace(
-    x = time_steps,
-    y = control_inputs[,i],
-    name = paste("Control Input", i),
-    type = 'scatter',
-    mode = 'lines',
-    line = list(dash = 'solid')
-  )
-}
-
-# Add traces for control_inputs_dnn
-for (i in 1:ncol(control_inputs_dnn)) {
-  plot <- plot %>% add_trace(
-    x = time_steps,
-    y = control_inputs_dnn[,i],
-    name = paste("DNN Control Input", i),
-    type = 'scatter',
-    mode = 'lines',
-    line = list(dash = 'dash')
-  )
-}
-
-plot <- plot %>% layout(
-  title = "Comparison of Control Inputs",
-  xaxis = list(title = "Time Step"),
-  yaxis = list(title = "Control Input Value", type = "log"),  # Changed to log scale
-  legend = list(x = 0.1, y = 0.9)
-)
-
-# Display the plot
-plot
-```
----
 ## System Model
+In the experiment, the differential drive mobile robot system is the chosen for our study case. The robot will be deployed inside the PyBullet environment which is the main objective environment that we will explore with our implementation. The hardware the we are experiment on is the desktop running Ubuntu OS, RTX 3080Ti 10GB VRAM and RAM spec 16GB. <br>
+The system model of this differential drive 4-wheeled mobile robot captures both linear and rotational motion of the system.
 ---
-## System Identification using each Controller PyBullet Environment
+Here are the parameter that we use inside the PyBullet environment for our simulation
+<div style="text-align: center;">
+  <img src="images/robot_table.png" alt="robot params" style="width: auto; height: 250px;">
+</div>
 ---
-## Design Deep Neural Network
+## System Identification using each Controller In Pybullet Environment
+**Design Deep Neural Network** <br>
+In this step, we process data collection based on the simulation environment. We collect the data by implementing the nominal system with the MPC controller and MPPI controller. Then, we design a simple 5-layer Multilayer Perceptron or Deep Neural Network with 3 hidden layers. Each neuron in the hidden layers is activated using the Tanh activation function. This Deep Neural Network Model has 792,579 to calculate during each epoch of training step.
+
+<div style="text-align: center;">
+  <img src="images/dnn_drawing.png" alt="DNN 5 MLPS" style="width: auto; height: 250px;">
+  <p style="text-align: center; font-style: italic;">Figure 3.1 Neural Network Model.</p>
+</div>
 ---
 ## Model Predictive Control with Learned Dyanmcis using Acados
+**Training the Neural Network** <br>
+<div style="text-align: center;">
+  <img src="images/mpc_dnn_params.png" style="width: auto; height: 250px;">
+  <p style="text-align: center; font-style: italic;">Table 3.1 Comparison of DNN Training Loss for MPPI.</p>
+</div>
 ---
-## Training the Neural Network
+**Training Neural Network**
+<div style="display: flex; justify-content: space-between;">
+  <div style="flex: 1; margin-right: 20px;">
+    <img src="images/loss_mlp.png" alt="Prediction horizon" style="width: auto; height: 300px;">
+  </div>
+  <div style="flex: 1;">
+    <img src="images/loss_mlp_mae.png" alt="Obstacle avoidance" style="width: auto; height: 300px;">
+  </div>
+</div>
+<p style="text-align: center; font-style: italic;">Figure 3.2 Training and Validation Loss of MLP.</p>
 ---
-## Compare MPC performance nominal model vs learned model
----
-## Model Predictive Path Integral Control using PyTorch
----
-## Training the Neural Network
----
-## Compare MPPI performance nominal model vs learned model
----
+**Training Neural Network**
+<div style="display: flex; justify-content: space-between;">
+  <div style="flex: 1; margin-right: 20px;">
+    <img src="images/loss_resnet18.png" alt="Prediction horizon" style="width: auto; height: 300px;">
 
-# Conclusion and Future Work
+  </div>
+  <div style="flex: 1;">
+    <img src="images/loss_resnet18_mae.png" alt="Obstacle avoidance" style="width: auto; height: 300px;">
+  </div>
+</div>
+<p style="text-align: center; font-style: italic;">Figure 3.3 Training and Validation Loss of Resnet18.</p>
+---
+**Training Neural Network**
+<div style="display: flex; justify-content: space-between;">
+  <div style="flex: 1; margin-right: 20px;">
+    <img src="images/loss_resnet50.png" alt="Prediction horizon" style="width: auto; height: 300px;">
 
+  </div>
+  <div style="flex: 1;">
+    <img src="images/loss_resnet50_mae.png" alt="Obstacle avoidance" style="width: auto; height: 300px;">
+  </div>
+</div>
+<p style="text-align: center; font-style: italic;">Figure 3.4 Training and Validation Loss of Resnet50.</p>
+---
+**Compare MPC performance nominal model vs learned model** <br>
+The Obstacle Parameter, lists the properties of three obstacles, including their
+positions, velocities, and radii
+<div style="text-align: center;">
+  <img src="images/obstacle_params.png" alt="Obstacle Params="width: auto; height: 250px;">
+  <p style="text-align: center; font-style: italic;">Table 3.2 Obstacle Parameter.</p>
+</div>
+---
+**Compare MPC performance nominal model vs learned model** <br>
+The MPC Parameter Values, shows the configuration parameters for the Model
+Predictive Control (MPC) algorithm, including cost matrices, state and control bounds, predic-
+tion horizon, time step, total prediction time, and cost type.
+<div style="text-align: center;">
+  <img src="images/mpc_exp_params.png" alt="MPC Params="width: auto; height: 5px;">
+  <p style="text-align: center; font-style: italic;">Table 3.3 MPC Parameter.</p>
+</div>
+---
+**Compare MPC performance nominal model vs learned model** <br>
+<div style="display: flex; justify-content: space-between;">
+  <div style="flex: 1; margin-right: 20px;">
+    <img src="images/state_errors_no_dnn.png" alt="" style="width: auto; height: 250px;">
+    <p style="text-align: center; font-style: italic;">Figure 3.5 State Errors without DNN.</p>
+  </div>
+  <div style="flex: 1;">
+    <img src="images/state_errors_dnn.png" alt="Obstacle avoidance" style="width: auto; height: 250px;">
+    <p style="text-align: center; font-style: italic;">Figure 3.6 State Errors with DNN.</p>
+  </div>
+</div>
+---
+**Compare MPC performance nominal model vs learned model** <br>
+<div style="text-align: center;">
+  <img src="images/state_reference_and_feedback.png" alt="" style="width: auto; height: 250px;">
+  <p style="text-align: center; font-style: italic;">Figure 3.7 State Feedback and the Input Control with Nominal Model.</p>
+</div>
+---
+**Compare MPC performance nominal model vs learned model** <br>
+<div style="text-align: center;">
+  <img src="images/state_reference_and_feedback_dnn.png" alt="" style="width: auto; height: 250px;">
+  <p style="text-align: center; font-style: italic;">Figure 3.8 State Feedback and the Input Control with Nominal Model fused with Data Driven
+Model.</p>
+</div>
+---
+## Model Path Predictive Integral Control with GPU Accelerate using PyTorch
+**Training Neural Network**
+<div style="text-align: center;">
+  <img src="images/mppi_dnn_params.png" alt="MPPI DNN Params="width: auto; height: 250px;">
+  <p style="text-align: center; font-style: italic;">Table 3.4 Comparison of DNN Training Loss for MPPI.</p>
+</div>
+---
+**Training Neural Network**
+<div style="display: flex; justify-content: space-between;">
+  <div style="flex: 1; margin-right: 20px;">
+    <img src="images/loss_mppi_mlp.png" alt="Prediction horizon" style="width: auto; height: 300px;">
 
+  </div>
+  <div style="flex: 1;">
+    <img src="images/loss_mppi_mlp_mae.png" alt="Obstacle avoidance" style="width: auto; height: 300px;">
+  </div>
+</div>
+<p style="text-align: center; font-style: italic;">Figure 3.2 Training and Validation Loss of MLP.</p>
+---
+**Training Neural Network**
+<div style="display: flex; justify-content: space-between;">
+  <div style="flex: 1; margin-right: 20px;">
+    <img src="images/loss_mppi_resnet18.png" alt="Prediction horizon" style="width: auto; height: 300px;">
+
+  </div>
+  <div style="flex: 1;">
+    <img src="images/loss_mppi_resnet18_mae.png" alt="Obstacle avoidance" style="width: auto; height: 300px;">
+  </div>
+</div>
+<p style="text-align: center; font-style: italic;">Figure 3.3 Training and Validation Loss of Resnet18.</p>
+---
+**Training Neural Network**
+<div style="display: flex; justify-content: space-between;">
+  <div style="flex: 1; margin-right: 20px;">
+    <img src="images/loss_mppi_resnet50.png" alt="Prediction horizon" style="width: auto; height: 300px;">
+
+  </div>
+  <div style="flex: 1;">
+    <img src="images/loss_mppi_resnet50_mae.png" alt="Obstacle avoidance" style="width: auto; height: 300px;">
+  </div>
+</div>
+<p style="text-align: center; font-style: italic;">Figure 3.4 Training and Validation Loss of Resnet50.</p>
+---
+**Compare MPPI performance nominal model vs learned model**
+The Obstacle Parameter, lists the properties of three obstacles, including their
+positions, velocities, and radii
+<div style="text-align: center;">
+  <img src="images/obstacle_params.png" style="width: auto; height: 250px;">
+  <p style="text-align: center; font-style: italic;">Table 3.5 Obstacle Parameter.</p>
+</div>
+---
+**Compare MPPI performance nominal model vs learned model**
+The result of MPPI controller is also similar to MPC. It shows that the DNN model improves the
+performance on the controller. The MPPI Controller using the sampling size 𝐾 over a prediction
+horizons of 𝑁.
+<div style="text-align: center;">
+  <img src="images/mppi_exp_params.png" style="width: auto; height: 250px;">
+  <p style="text-align: center; font-style: italic;">Table 3.6 MPPI Parameter.</p>
+</div>
+---
+**Compare MPPI performance nominal model vs learned model**
+<div style="display: flex; justify-content: space-between;">
+  <div style="flex: 1; margin-right: 20px;">
+    <img src="images/mppi_state_errors_mppi.png" alt="" style="width: auto; height: 250px;">
+    <p style="text-align: center; font-style: italic;">Figure 3.6 State Errors without DNN.</p>
+  </div>
+  <div style="flex: 1;">
+    <img src="images/mppi_state_errors_mppi_dnn.png" alt="Obstacle avoidance" style="width: auto; height: 250px;">
+    <p style="text-align: center; font-style: italic;">Figure 3.7 State Errors with DNN.</p>
+  </div>
+</div>
+---
+**Compare MPPI performance nominal model vs learned model**
+<div style="text-align: center;">
+  <img src="images/state_reference_and_feedback_mppi.png" style="width: auto; height: 250px;">
+  <p style="text-align: center; font-style: italic;">Figure 3.8 State reference and state feedback using Nominal Model
+Model.</p>
+</div>
+---
+**Compare MPPI performance nominal model vs learned model**
+<div style="text-align: center;">
+  <img src="images/state_reference_and_feedback_mppi_dnn.png" style="width: auto; height: 250px;">
+  <p style="text-align: center; font-style: italic;">Figure 3.9 State reference and state feedback using Nominal Model fused with Data Driven
+Model.</p>
+</div>
+---
+**Compare MPPI performance nominal model vs learned model**
+<div style="text-align: center;">
+  <img src="images/mppi_control_inputs_smooth_dnn.png" style="width: auto; height: 250px;"">
+  <p style="text-align: center; font-style: italic;">Figure 3.10 Input Control of Nominal Model
+Model.</p>
+</div>
+---
+**Compare MPPI performance nominal model vs learned model**
+<div style="text-align: center;">
+  <img src="images/mppi_control_inputs_smooth_dnn.png" style="width: auto; height: 250px;">
+  <p style="text-align: center; font-style: italic;">Figure 3.9 State reference and state feedback using Nominal Model fused with Data Driven
+Model.</p>
+</div>
+---
+# In Conclusion and Future work
+
+The study presents a high-performance control approach combining Deep Neural Networks with Model Predictive Control (MPC) and Model Predictive Path Integral (MPPI). This method effectively captures complex system dynamics in noisy environments, outperforming traditional nominal equation-based control. While the approach shows significant potential, it currently requires substantial computational resources. Future development should focus on deploying this technique in real-time hardware, utilizing simulation tools like Nvidia's Omniverse for data collection, and implementing it on GPU-enabled devices such as Nvidia's Jetson for practical robotic applications.
 ---
 # References
-
 ```{r results='asis', echo=FALSE}
-PrintBibliography(bib)
+split_bib(bib, chunk_size = 5)
