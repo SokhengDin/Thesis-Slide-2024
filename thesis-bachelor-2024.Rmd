@@ -519,7 +519,7 @@ In this step, we process data collection based on the simulation environment. We
 The Obstacle Parameter, lists the properties of three obstacles, including their
 positions, velocities, and radii
 <div style="text-align: center;">
-  <img src="images/obstacle_params.png" alt="Obstacle Params="width: auto; height: 250px;">
+  <img src="images/obstacle_params.png" alt="Obstacle Params" style="width: auto; height: 250px;">
   <p style="text-align: center; font-style: italic;">Table 3.2 Obstacle Parameter.</p>
 </div>
 ---
@@ -528,7 +528,7 @@ The MPC Parameter Values, shows the configuration parameters for the Model
 Predictive Control (MPC) algorithm, including cost matrices, state and control bounds, predic-
 tion horizon, time step, total prediction time, and cost type.
 <div style="text-align: center;">
-  <img src="images/mpc_exp_params.png" alt="MPC Params="width: auto; height: 5px;">
+  <img src="images/mpc_exp_params.png" alt="MPC Params" style="width: auto; height: 250px;">
   <p style="text-align: center; font-style: italic;">Table 3.3 MPC Parameter.</p>
 </div>
 ---
