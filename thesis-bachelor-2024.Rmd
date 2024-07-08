@@ -155,70 +155,15 @@ Model Predictive Control (MPC) is an optimal control method, that is currently v
 </div>
 ---
 ## Discrete the system model with Runge-Kutta 4th order
-<figure style="text-align: center; margin: 20px 0; max-width: 800px; margin-left: auto; margin-right: auto;">
-  <div style="display: flex; justify-content: center;">
-    ```{r runge-kutta-plot, fig.width=6, fig.height=5, echo=FALSE, message=FALSE, warning=FALSE}
-    library(plotly)
-    library(deSolve)
-    
-    # Define the ODE function (example: dy/dt = y^2)
-    ode_func <- function(t, y, parms) {
-      list(y^2)
-    }
-    
-    # Exact solution
-    exact_solution <- function(t) {
-      1 / (1 - t)
-    }
-    
-    # Time points
-    t <- seq(0, 0.9, by = 0.01)
-    
-    # Solve using ode function for ode45 (RK4/5) and ode23 (RK2/3)
-    parms <- list()  # Empty list as we don't need parameters for this simple ODE
-    out_rk45 <- ode(y = 1, times = t, func = ode_func, parms = parms, method = "ode45")
-    out_rk23 <- ode(y = 1, times = t, func = ode_func, parms = parms, method = "ode23")
-    
-    # Euler method (implemented manually)
-    euler <- function(y0, t, h) {
-      y <- numeric(length(t))
-      y[1] <- y0
-      for (i in 2:length(t)) {
-        y[i] <- y[i-1] + h * y[i-1]^2
-      }
-      y
-    }
-    
-    out_euler <- euler(1, t, 0.01)
-    out_euler_half <- euler(1, t, 0.005)
-    
-    # Create the plot
-    plot <- plot_ly() %>%
-      add_lines(x = t, y = exact_solution(t), name = "Exact solution", line = list(color = 'red')) %>%
-      add_lines(x = t, y = out_rk45[,2], name = "4th/5th order RK", line = list(color = 'green')) %>%
-      add_lines(x = t, y = out_rk23[,2], name = "2nd/3rd order RK", line = list(color = 'blue')) %>%
-      add_lines(x = t, y = out_euler_half, name = "Euler (half step)", line = list(color = 'purple')) %>%
-      add_lines(x = t, y = out_euler, name = "Euler", line = list(color = 'orange')) %>%
-      layout(
-        title = "Comparison of Numerical Methods",
-        xaxis = list(title = "t"),
-        yaxis = list(title = "y", range = c(0, 25)),
-        legend = list(x = 0, y = 1, bgcolor = 'rgba(255, 255, 255, 0.5)')
-      )
-    
-    # Display the plot
-    plot
-    ```
-  </div>
-  <figcaption style="margin-top: 15px; font-style: italic; color: #555; font-size: 0.9em; line-height: 1.4; max-width: 90%; margin-left: auto; margin-right: auto;">
-    Figure 2.3: Runge Kutta Approximator 4th order.
-  </figcaption>
-</figure>
+<div style="text-align: center;">
+  <img src="images/runge-kutta.png" alt="Diagram of System identification stage" style="width: auto; height: 400px;">
+  <p style="text-align: center; font-style: italic;">Figure 2.3 Runge-Kutta 4th order approximator .</p>
+</div>
 ---
 ## Model Predictive Path Integral
 Model Predictive Path Integral(MPPI) is an upgrade control strategy over MPC. It combines the concepts from Model Predictive Control(MPC) and stochastic optimal control. The original paper `r Citet(bib, "williams2017information")` was developed based on the information theoretic that help measure the statistic value of the sampling, that can be matched the optimal control law.
 <div style="text-align: center;">
-  <img src="images/dnn-layers.png" alt="DNN Layers" style="width: auto; height: 270px;">
+  <img src="images/mppi_diagram.png" alt="DNN Layers" style="width: auto; height: 270px;">
   <p style="text-align: center; font-style: italic;">Figure 2.4 MPPI Prediction and Sampling .</p>
 </div>
 ---
@@ -229,23 +174,22 @@ To perform obstacle avoidance, it is necessary to have a well understanding of t
   <p style="text-align: center; font-style: italic;">Figure 2.5 Overview of the proposed approach.</p>
 </div>
 ---
-## Deep Neural Network
-Deep Neural Network is an artificial neural network that consists of multiple layers of neurons, also known as nodes or units. Each neuron consist of activation function that take input from the previous neuron mapped into the activation function.
+## Stage of System Identification
 <div style="text-align: center;">
-  <img src="images/dnn-layers.png" alt="DNN Layers" style="width: auto; height: 270px;">
-  <p style="text-align: center; font-style: italic;">Figure 2.6 Deep Neural Network .</p>
+  <img src="images/data_collect.png" alt="Diagram of System identification stage" style="width: auto; height: 400px;">
+  <p style="text-align: center; font-style: italic;">Figure 2.6 Diagram of Data Collection Process .</p>
 </div>
 ---
 ## Stage of System Identification
 <div style="text-align: center;">
-  <img src="images/system_idti.png" alt="Diagram of System identification stage" style="width: auto; height: 400px;">
-  <p style="text-align: center; font-style: italic;">Figure 2.7 Diagram of System identification stage .</p>
+  <img src="images/training_step.png" alt="Diagram of System identification stage" style="width: auto; height: 400px;">
+  <p style="text-align: center; font-style: italic;">Figure 2.7 Diagram of Training Process .</p>
 </div>
 ---
 ## Stage of Concatenating Residual Dynamics
 <div style="text-align: center;">
   <img src="images/learned_sys.png" alt="Diagram of System concatenating stage" style="width: auto; height: 350px;">
-  <p style="text-align: center; font-style: italic;">Figure 2.8 Diagram of System concatenating stage .</p>
+  <p style="text-align: center; font-style: italic;">Figure 2.8 Diagram of fusing Nominal Model with Data-driven model .</p>
 </div>
 ---
 # Result and Discussion
@@ -260,7 +204,7 @@ Data is collected using MPC and MPPI controllers, then processed with a 5-layer 
 **Training Neural Network**
 <div style="text-align: center;">
   <img src="images/mpc_loss_compare_dnn.png" alt="" style="width: auto; height: 250px;">
-  <p style="text-align: center; font-style: italic;">Table 3.2 Training loss compare to MLP, ResNet18, ResNet50.</p>
+  <p style="text-align: center; font-style: italic;">Table 3.1 Training loss compare to MLP, ResNet18, ResNet50.</p>
 </div>
 ---
 **Compare MPC performance nominal model vs learned model** <br>
@@ -282,13 +226,13 @@ Data is collected using MPC and MPPI controllers, then processed with a 5-layer 
       <div style="width: 100%; padding-top: 75%; position: relative; overflow: hidden;">
         <img src="images/state_reference_and_feedback.png" alt="Nominal Model" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
       </div>
-      <p style="margin-top: 10px; font-style: italic; text-align: center;">Nominal Model</p>
+      <p style="margin-top: 10px; font-style: italic; text-align: center;">Figure 3.5: Nominal Model</p>
     </div>
     <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
       <div style="width: 100%; padding-top: 75%; position: relative; overflow: hidden;">
         <img src="images/state_reference_and_feedback_dnn.png" alt="Nominal Model with Data-Driven Model" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
       </div>
-      <p style="margin-top: 10px; font-style: italic; text-align: center;">Nominal Model with Data-Driven Model</p>
+      <p style="margin-top: 10px; font-style: italic; text-align: center;">Figure 3.6: Nominal with Data-Driven Model</p>
     </div>
   </div>
 </div>
@@ -300,12 +244,14 @@ Data is collected using MPC and MPPI controllers, then processed with a 5-layer 
       <source src="videos/diff_mpc_bullet.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
+    <p style="margin-top: 10px; font-style: italic; text-align: center;">Nominal Model</p>
   </div>
 <div class="video-wrapper">  
   <video width="100%" height="400" controls autoplay muted loop playsinline>
     <source src="videos/diff_mpc_dnn_bullet.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
+  <p style="margin-top: 10px; font-style: italic; text-align: center;">Nominal with Data-Driven Model</p>
 </div>
 <script>
 document.currentScript.previousElementSibling.querySelector('video').playbackRate = 3;
@@ -317,7 +263,7 @@ document.currentScript.previousElementSibling.querySelector('video').playbackRat
 **Training Neural Network**
 <div style="text-align: center;">
   <img src="images/mppi_dnn_params.png" alt="MPPI DNN Params="width: auto; height: 250px;">
-  <p style="text-align: center; font-style: italic;">Table 3.4 Comparison of DNN Training Loss for MPPI.</p>
+  <p style="text-align: center; font-style: italic;">Table 3.2 Comparison of DNN Training Loss for MPPI.</p>
 </div>
 ---
 **Compare MPPI performance nominal model vs learned model**
@@ -351,7 +297,7 @@ document.currentScript.previousElementSibling.querySelector('video').playbackRat
 <div style="max-width: 1000px; margin: 0 auto;">
   <div style="display: flex; justify-content: space-between; margin-top: 20px;">
     <div style="width: 48%; text-align: center;">
-      <img src="images/mppi_control_inputs_smooth_dnn.png" alt="Input Control of Nominal Model" style="width: auto; height: 250px; max-width: 100%;">
+      <img src="images/mppi_control_inputs_smooth.png" alt="Input Control of Nominal Model" style="width: auto; height: 250px; max-width: 100%;">
       <p style="text-align: center; font-style: italic;">Figure 3.10 Input Control of Nominal Model</p>
     </div>
     <div style="width: 48%; text-align: center;">
