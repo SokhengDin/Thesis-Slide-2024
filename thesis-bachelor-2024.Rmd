@@ -143,7 +143,8 @@ This thesis integrates Deep Neural Networks with Model Predictive Control and Mo
 ---
 # Design Methodology
 ## Model Predictive Control
-Model Predictive Control (MPC) is an optimal control method, that is currently very popular in Robotics Control System.Model Predictive Control offers a variety value of the control action sequentially over the finite future prediction
+Model Predictive Control (MPC) is an optimal control method that is currently very popular in robotics control systems. 
+Model Predictive Control offers a variety of control actions sequentially over a finite future prediction horizon.
 
 <div style="display: flex; justify-content: space-between;">
   <div style="flex: 1; margin-right: 20px;">
@@ -157,7 +158,7 @@ Model Predictive Control (MPC) is an optimal control method, that is currently v
 </div>
 ---
 ## Discrete the system model with Runge-Kutta 4th order
-Runge-Kutta  4th order method can be used as an approximator of the system, it enhances the prediction accuracy of the system dynamics within the control horizon of the MPC
+The Runge-Kutta 4th order method can be used as an approximator of the system, enhancing the prediction accuracy of the system dynamics within the control horizon of the MPC.
 
 <div style="flex: 1; text-align: center;">
             <img src="images/runge-kutta.png" alt="Diagram of System identification stage" style="max-width: 50%; height: auto;">
