@@ -4,10 +4,36 @@
   src: local('Times New Roman'), local('TimesNewRoman');
 }
 
+.toc-list {
+  list-style-type: none;
+  padding-left: 0;
+  counter-reset: toc-counter;
+}
+
+.toc-list li {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.toc-list li::before {
+  counter-increment: toc-counter;
+  content: counter(toc-counter, upper-roman) ".";
+  font-weight: bold;
+  min-width: 40px; /* Adjust this value as needed */
+  text-align: right;
+  margin-right: 10px;
+}
+
+.toc-list a {
+  font-weight: bold;
+  color: #1a5173;
+  text-decoration: none;
+}
 /* Common styles */
 body {
   font-family: 'Times New Roman', Times, serif;
-  font-size: 0.9rem;
+  font-size: 14px;
 }
 
 /* Title slide styles */

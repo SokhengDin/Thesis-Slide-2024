@@ -4,9 +4,7 @@
 $(document).ready(function() {
 var generateTOC = function() {
   var toc = '<ol class="toc-list">';
-  var sectionCount = 0;
   var prevSectionTitle = '';
-
   $('.remark-slide-content').each(function(index, slide) {
     var $slide = $(slide);
     
@@ -14,17 +12,13 @@ var generateTOC = function() {
     if ($slide.hasClass('title-slide') || $slide.find('h1').text().trim().toLowerCase() === 'table of contents') {
       return;
     }
-
     $slide.find('h1').each(function() {
       var $header = $(this);
       var headerText = $header.text().trim();
       var sectionTitle = headerText.replace(/^[IVX]+\.\s*/, '');
-
       if (sectionTitle !== prevSectionTitle) {
-        sectionCount++;
         prevSectionTitle = sectionTitle;
-        toc += '<li><a href="#' + (index + 1) + '">' + 
-               romanize(sectionCount) + '. ' + sectionTitle + '</a></li>';
+        toc += '<li><a href="#' + (index + 1) + '">' + sectionTitle + '</a></li>';
       }
     });
   });

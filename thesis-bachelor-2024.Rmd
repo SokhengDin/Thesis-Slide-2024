@@ -134,10 +134,10 @@ class: center, middle, title-slide
 ---
 # Introduction
 Study Background
-This thesis integrates Deep Neural Networks with Model Predictive Control and Model Predictive Path Integral to enhance control accuracy in dynamic environments, addressing challenges with deep learning techniques and advanced robotics control.. Recent research has shown that DNNs can be effectively used as add-on modules to enhance robot performance in trajectory tracking tasks `r Citet(bib, "zhou2020deep")`.
+This thesis integrates Deep Neural Networks with Model Predictive Control and Model Predictive Path Integral to enhance control accuracy in dynamic environments, addressing challenges with deep learning techniques and advanced robotics control.
 
 <div style="text-align: center;">
-  <img src="images/thesis_diagram_intro.png" alt="Thesis Diagram" style="width: auto; height: 270px;">
+  <img src="images/thesis_diagram.png" alt="Thesis Diagram" style="width: auto; height: 350px;">
   <p style="text-align: center; font-style: italic;">Figure 1.1 Overview of the proposed approach.</p>
 </div>
 ---
@@ -157,6 +157,13 @@ Model Predictive Control offers a variety of control actions sequentially over a
   </div>
 </div>
 ---
+## Model Predictive Path Integral
+Model Predictive Path Integral(MPPI) is an upgrade control strategy over MPC. It combines the concepts from Model Predictive Control(MPC) and stochastic optimal control. The original paper `r Citet(bib, "williams2017information")` was developed based on the information theoretic that help measure the statistic value of the sampling, that can be matched the optimal control law.
+<div style="text-align: center;">
+  <img src="images/mppi_diagram_v2.png" alt="DNN Layers" style="width: auto; height: 270px;">
+  <p style="text-align: center; font-style: italic;">Figure 2.4 MPPI Prediction and Sampling .</p>
+</div>
+---
 ## Discrete the system model with Runge-Kutta 4th order
 The Runge-Kutta 4th order method can be used as an approximator of the system, enhancing the prediction accuracy of the system dynamics within the control horizon of the MPC.
 
@@ -164,13 +171,6 @@ The Runge-Kutta 4th order method can be used as an approximator of the system, e
             <img src="images/runge-kutta.png" alt="Diagram of System identification stage" style="max-width: 50%; height: auto;">
             <p style="font-style: italic;">Figure 2.3 Runge-Kutta 4th order approximator.</p>
         </div>
----
-## Model Predictive Path Integral
-Model Predictive Path Integral(MPPI) is an upgrade control strategy over MPC. It combines the concepts from Model Predictive Control(MPC) and stochastic optimal control. The original paper `r Citet(bib, "williams2017information")` was developed based on the information theoretic that help measure the statistic value of the sampling, that can be matched the optimal control law.
-<div style="text-align: center;">
-  <img src="images/mppi_diagram.png" alt="DNN Layers" style="width: auto; height: 270px;">
-  <p style="text-align: center; font-style: italic;">Figure 2.4 MPPI Prediction and Sampling .</p>
-</div>
 ---
 ## Path Constraint Obstacle Avoidance
 To perform obstacle avoidance, it is necessary to have a well understanding of the path constraint or constraint of our optimization problem. The most commonly used method for setting obstacle avoidance in a 2D-plane is by measuring the coordinates $(x, y)$ of the robot with respect to the coordinates $(x, y)$ of the obstacle.
@@ -181,19 +181,19 @@ To perform obstacle avoidance, it is necessary to have a well understanding of t
 ---
 ## Stage of System Identification
 <div style="text-align: center;">
-  <img src="images/data-collection-step.png" alt="Diagram of System identification stage" style="width: auto; height: 400px;">
+  <img src="images/data_collection.png" alt="Diagram of System identification stage" style="width: auto; height: 400px;">
   <p style="text-align: center; font-style: italic;">Figure 2.6 Diagram of Data Collection Process .</p>
 </div>
 ---
 ## Stage of System Identification
 <div style="text-align: center;">
-  <img src="images/training-step.png" alt="Diagram of System identification stage" style="width: auto; height: 400px;">
+  <img src="images/training_process.png" alt="Diagram of System identification stage" style="width: auto; height: 350px;">
   <p style="text-align: center; font-style: italic;">Figure 2.7 Diagram of Training Process .</p>
 </div>
 ---
 ## Stage of Concatenating Residual Dynamics
 <div style="text-align: center;">
-  <img src="images/fusing-step.png" alt="Diagram of System concatenating stage" style="width: auto; height: 350px;">
+  <img src="images/nominal_data_driven.png" alt="Diagram of System concatenating stage" style="width: auto; height: 350px;">
   <p style="text-align: center; font-style: italic;">Figure 2.8 Diagram of fusing Nominal Model with Data-driven model .</p>
 </div>
 ---
@@ -279,30 +279,26 @@ document.currentScript.previousElementSibling.querySelector('video').playbackRat
 </div>
 ---
 **Compare MPPI performance nominal model vs learned model**
-<div style="max-width: 1000px; margin: 0 auto;">
-  <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-    <div style="width: 48%; text-align: center;">
-      <img src="images/state_reference_and_feedback_mppi.png" alt="Nominal Model" style="width: auto; height: 250px; max-width: 100%;">
-      <p style="text-align: center; font-style: italic;">Figure 3.8 State reference and state feedback using Nominal Model</p>
-    </div>
-    <div style="width: 48%; text-align: center;">
-      <img src="images/state_reference_and_feedback_mppi_dnn.png" alt="Nominal Model with Data-Driven Model" style="width: auto; height: 250px; max-width: 100%;">
-      <p style="text-align: center; font-style: italic;">Figure 3.9 State reference and state feedback using Nominal Model fused with Data Driven Model</p>
-    </div>
+<div style="display: flex; justify-content: space-between;">
+  <div style="flex: 1;">
+    <img src="images/state_reference_and_feedback_mppi.png" alt="" style="width: auto; height: 300px;">
+    <p style="text-align: center; font-style: italic;">Figure 3.8 State reference and state feedback using Nominal Model</p>
+  </div>
+  <div style="flex: 1;">
+    <img src="images/state_reference_and_feedback_mppi_dnn.png" alt="" style="width: auto; height: 300px;">
+    <p style="text-align: center; font-style: italic;">Figure 3.9 State reference and state feedback using Nominal Model fused with Data Driven Model</p>
   </div>
 </div>
 ---
 **Compare MPPI performance nominal model vs learned model**
-<div style="max-width: 1000px; margin: 0 auto;">
-  <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-    <div style="width: 48%; text-align: center;">
-      <img src="images/mppi_control_inputs_smooth.png" alt="Input Control of Nominal Model" style="width: auto; height: 250px; max-width: 100%;">
-      <p style="text-align: center; font-style: italic;">Figure 3.10 Input Control of Nominal Model</p>
-    </div>
-    <div style="width: 48%; text-align: center;">
-      <img src="images/mppi_control_inputs_smooth_dnn.png" alt="Input Control of Nominal Model with Data-Driven Model" style="width: auto; height: 250px; max-width: 100%;">
-      <p style="text-align: center; font-style: italic;">Figure 3.11 Input Control of Nominal Model fused with Data Driven Model</p>
-    </div>
+<div style="display: flex; justify-content: space-between;">
+  <div style="flex: 1;">
+    <img src="images/mppi_control_inputs_smooth.png" alt="" style="width: auto; height: 300px;">
+    <p style="text-align: center; font-style: italic;">Figure 3.10 Input Control of Nominal Model</p>
+  </div>
+  <div style="flex: 1;">
+    <img src="images/mppi_control_inputs_smooth_dnn.png" alt="" style="width: auto; height: 300px;">
+    <p style="text-align: center; font-style: italic;">Figure 3.11 Input Control of Nominal Model fused with Data Driven Model</p>
   </div>
 </div>
 ---
@@ -322,9 +318,26 @@ document.currentScript.previousElementSibling.querySelector('video').playbackRat
   </div>
 </div>
 ---
-# In Conclusion and Future work
-
-The study presents a high-performance control approach combining Deep Neural Networks with Model Predictive Control (MPC) and Model Predictive Path Integral (MPPI). This method effectively captures complex system dynamics in noisy environments, outperforming traditional nominal equation-based control. While the approach shows significant potential, it currently requires substantial computational resources. Future development should focus on deploying this technique in real-time hardware, utilizing simulation tools like Nvidia's Omniverse for data collection, and implementing it on GPU-enabled devices such as Nvidia's Jetson for practical robotic applications.
+# Conclusion and Future work
+** Conclusion ** <br>
+The study presents a high-performance control approach combining Deep Neural Networks with Model Predictive Control (MPC) and Model Predictive Path Integral (MPPI). This method effectively captures complex system dynamics in noisy environments, outperforming traditional nominal equation-based control. While the approach shows significant potential, it currently requires substantial computational resources.
+---
+** Future Work ** 
+Future development should focus on deploying this technique in real-time hardware, utilizing simulation tools like Nvidia's Omniverse for data collection, and implementing it on GPU-enabled devices such as Nvidia's Jetson and ROS2 framework for practical robotic applications.
+<div style="display: flex; justify-content: space-between;">
+  <div style="width: 32%; text-align: center;">
+    <img src="images/omniverse.png" alt="Image 1" style="height: 300px; width: auto;">
+    <p>Omnivere Simulation SDK</p>
+  </div>
+  <div style="width: 32%; text-align: center;">
+    <img src="images/jetson_orin.png" alt="Image 2" style="height: 300px; width: auto;">
+    <p>NVIDIA Jetson Nano</p>
+  </div>
+  <div style="width: 32%; text-align: center;">
+    <img src="images/ros2_iron.png" alt="Image 3" style="height: 300px; width: auto;">
+    <p>ROS Iron Irwin</p>
+  </div>
+</div>
 ---
 # References
 ```{r results='asis', echo=FALSE}
@@ -333,32 +346,35 @@ split_bib(bib, chunk_size = 4)
 ---
 
 # Appendix
-<div style="display: flex; justify-content: space-between; font-size: 1.3em;">
+<div style="display: flex; justify-content: space-between; font-size: 0.9em;">
   <div style="width: 48%;">
-    <p style="text-align: center; font-weight: bold; font-size: 1.2em; margin-bottom: 20px;">Runge-Kutta Method</p>
+    <p style="text-align: center; font-weight: bold; font-size: 1em;">Runge-Kutta Method</p>
     \begin{align*}
-    k_1 &= f(t, y) \\[5pt]
-    k_2 &= f\left(t + \frac{\Delta t}{2}, y + \frac{\Delta t}{2} \cdot k_1\right) \\[5pt]
-    k_3 &= f\left(t + \frac{\Delta t}{2}, y + \frac{\Delta t}{2} \cdot k_2\right) \\[5pt]
-    k_4 &= f(t + \Delta t, y + \Delta t \cdot k_3) \\[5pt]
+    \scriptsize
+    k_1 &= f(t, y) \\
+    k_2 &= f\left(t + \frac{\Delta t}{2}, y + \frac{\Delta t}{2} \cdot k_1\right) \\
+    k_3 &= f\left(t + \frac{\Delta t}{2}, y + \frac{\Delta t}{2} \cdot k_2\right) \\
+    k_4 &= f(t + \Delta t, y + \Delta t \cdot k_3) \\
     y(t + \Delta t) &= y(t) + \frac{\Delta t}{6} (k_1 + 2k_2 + 2k_3 + k_4)
     \end{align*}
   </div>
   <div style="width: 48%;">
-    <p style="text-align: center; font-weight: bold; font-size: 1.2em; margin-bottom: 20px;">Obstacle Avoidance</p>
+    <p style="text-align: center; font-weight: bold; font-size: 1em;">Obstacle Avoidance</p>
     \begin{equation*}
+    \scriptsize
     \left(x_{\text{robot}}-x_{\text{obstacle}} \right)^{2} + \\
     \left(y_{\text{robot}}-y_{\text{obstacle}} \right)^{2} \geq{r^{2} + s^{2}}
     \end{equation*}
   </div>
 </div>
 ---
-<div style="display: flex; justify-content: space-between; width: 90%;">
+<div style="display: flex; justify-content: space-between; width: 90%; font-size: 0.9em;">
   <div style="width: 48%;">
-    <p style="text-align: center; font-weight: bold; font-size: 1.2em; margin-bottom: 15px;">MPC</p>
+    <p style="text-align: center; font-weight: bold; font-size: 1em;">MPC</p>
     \begin{align*}
+    \scriptsize
     \min_{u_{0:N-1}} &\sum_{k=0}^{N-1}(x_{k,ref}-x_{k})^TQ(x_{k,ref}-x_{k})+ \\
-    &(u_{k,ref}-u_{k})^TR(u_{k,ref}-u_{k}) + \phi(x_N) \\[8pt]
+    &(u_{k,ref}-u_{k})^TR(u_{k,ref}-u_{k}) + \phi(x_N) \\[6pt]
     \text{s.t.:} \quad & x_{k+1} = f(x_k, u_k) \\
     & g(x_k, x_k) \leq 0 \\
     & h(x_k, x_k) \leq 0 \\
@@ -367,19 +383,20 @@ split_bib(bib, chunk_size = 4)
     \end{align*}
   </div>
   <div style="width: 48%;">
-    <p style="text-align: center; font-weight: bold; font-size: 1.2em; margin-bottom: 15px;">MPPI</p>
+    <p style="text-align: center; font-weight: bold; font-size: 1em;">MPPI</p>
     \begin{align*}
+    \scriptsize
     w(V) &= \frac{1}{\eta} \exp\left(
     -\frac{1}{\lambda}( S(V) + \lambda(1-\alpha) \sum_{t=0}^{T-1}u_{t}^T\Sigma^{-1}(u_{t}+\epsilon_{t}) - \rho )
-    \right) \\[8pt]
+    \right) \\[6pt]
     \eta &= \sum_{k=1}^{K} \exp \left( 
     -\frac{1}{\lambda}( 
     S(U+\varepsilon_{k}) + \lambda(1-\alpha) \sum_{t=0}^{T-1}u_{t}^T\Sigma^{-1}(u_{t}+\epsilon_{t}^k) - \rho
     )
-    \right) \\[8pt]
+    \right) \\[6pt]
     \rho &= \min_{k}( 
     S(V_{k}) + \lambda(1-\alpha) \sum_{t=0}^{T-1}u_{t}^T\Sigma^{-1}(u_{t}+\epsilon_{t}^k)
-    ) \\[8pt]
+    ) \\[6pt]
     u_{t}^{i+1} &= u_{t}^{i} + \sum_{k=1}^{K}w(V_{k})\epsilon_{t}^k
     \end{align*}
   </div>

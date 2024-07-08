@@ -12,9 +12,7 @@
     $(document).ready(function() {
     var generateTOC = function() {
       var toc = '<ol class="toc-list">';
-      var sectionCount = 0;
       var prevSectionTitle = '';
-
       $('.remark-slide-content').each(function(index, slide) {
         var $slide = $(slide);
         
@@ -22,17 +20,13 @@
         if ($slide.hasClass('title-slide') || $slide.find('h1').text().trim().toLowerCase() === 'table of contents') {
           return;
         }
-
         $slide.find('h1').each(function() {
           var $header = $(this);
           var headerText = $header.text().trim();
           var sectionTitle = headerText.replace(/^[IVX]+\.\s*/, '');
-
           if (sectionTitle !== prevSectionTitle) {
-            sectionCount++;
             prevSectionTitle = sectionTitle;
-            toc += '<li><a href="#' + (index + 1) + '">' + 
-                   romanize(sectionCount) + '. ' + sectionTitle + '</a></li>';
+            toc += '<li><a href="#' + (index + 1) + '">' + sectionTitle + '</a></li>';
           }
         });
       });
@@ -163,16 +157,17 @@ class: center, middle, title-slide
 ---
 # Introduction
 Study Background
-This thesis integrates Deep Neural Networks with Model Predictive Control and Model Predictive Path Integral to enhance control accuracy in dynamic environments, addressing challenges with deep learning techniques and advanced robotics control.. Recent research has shown that DNNs can be effectively used as add-on modules to enhance robot performance in trajectory tracking tasks Zhou, Helwa, and Schoellig (2020).
+This thesis integrates Deep Neural Networks with Model Predictive Control and Model Predictive Path Integral to enhance control accuracy in dynamic environments, addressing challenges with deep learning techniques and advanced robotics control.
 
 &lt;div style="text-align: center;"&gt;
-  &lt;img src="images/thesis_diagram_intro.png" alt="Thesis Diagram" style="width: auto; height: 270px;"&gt;
+  &lt;img src="images/thesis_diagram.png" alt="Thesis Diagram" style="width: auto; height: 350px;"&gt;
   &lt;p style="text-align: center; font-style: italic;"&gt;Figure 1.1 Overview of the proposed approach.&lt;/p&gt;
 &lt;/div&gt;
 ---
 # Design Methodology
 ## Model Predictive Control
-Model Predictive Control (MPC) is an optimal control method, that is currently very popular in Robotics Control System.Model Predictive Control offers a variety value of the control action sequentially over the finite future prediction
+Model Predictive Control (MPC) is an optimal control method that is currently very popular in robotics control systems. 
+Model Predictive Control offers a variety of control actions sequentially over a finite future prediction horizon.
 
 &lt;div style="display: flex; justify-content: space-between;"&gt;
   &lt;div style="flex: 1; margin-right: 20px;"&gt;
@@ -185,20 +180,20 @@ Model Predictive Control (MPC) is an optimal control method, that is currently v
   &lt;/div&gt;
 &lt;/div&gt;
 ---
+## Model Predictive Path Integral
+Model Predictive Path Integral(MPPI) is an upgrade control strategy over MPC. It combines the concepts from Model Predictive Control(MPC) and stochastic optimal control. The original paper Williams, Drews, Goldfain, Rehg, and Theodorou (2017) was developed based on the information theoretic that help measure the statistic value of the sampling, that can be matched the optimal control law.
+&lt;div style="text-align: center;"&gt;
+  &lt;img src="images/mppi_diagram_v2.png" alt="DNN Layers" style="width: auto; height: 270px;"&gt;
+  &lt;p style="text-align: center; font-style: italic;"&gt;Figure 2.4 MPPI Prediction and Sampling .&lt;/p&gt;
+&lt;/div&gt;
+---
 ## Discrete the system model with Runge-Kutta 4th order
-Runge-Kutta  4th order method can be used as an approximator of the system, it enhances the prediction accuracy of the system dynamics within the control horizon of the MPC
+The Runge-Kutta 4th order method can be used as an approximator of the system, enhancing the prediction accuracy of the system dynamics within the control horizon of the MPC.
 
 &lt;div style="flex: 1; text-align: center;"&gt;
             &lt;img src="images/runge-kutta.png" alt="Diagram of System identification stage" style="max-width: 50%; height: auto;"&gt;
             &lt;p style="font-style: italic;"&gt;Figure 2.3 Runge-Kutta 4th order approximator.&lt;/p&gt;
         &lt;/div&gt;
----
-## Model Predictive Path Integral
-Model Predictive Path Integral(MPPI) is an upgrade control strategy over MPC. It combines the concepts from Model Predictive Control(MPC) and stochastic optimal control. The original paper Williams, Drews, Goldfain, Rehg, and Theodorou (2017) was developed based on the information theoretic that help measure the statistic value of the sampling, that can be matched the optimal control law.
-&lt;div style="text-align: center;"&gt;
-  &lt;img src="images/mppi_diagram.png" alt="DNN Layers" style="width: auto; height: 270px;"&gt;
-  &lt;p style="text-align: center; font-style: italic;"&gt;Figure 2.4 MPPI Prediction and Sampling .&lt;/p&gt;
-&lt;/div&gt;
 ---
 ## Path Constraint Obstacle Avoidance
 To perform obstacle avoidance, it is necessary to have a well understanding of the path constraint or constraint of our optimization problem. The most commonly used method for setting obstacle avoidance in a 2D-plane is by measuring the coordinates `\((x, y)\)` of the robot with respect to the coordinates `\((x, y)\)` of the obstacle.
@@ -209,19 +204,19 @@ To perform obstacle avoidance, it is necessary to have a well understanding of t
 ---
 ## Stage of System Identification
 &lt;div style="text-align: center;"&gt;
-  &lt;img src="images/data-collection-step.png" alt="Diagram of System identification stage" style="width: auto; height: 400px;"&gt;
+  &lt;img src="images/data_collection.png" alt="Diagram of System identification stage" style="width: auto; height: 400px;"&gt;
   &lt;p style="text-align: center; font-style: italic;"&gt;Figure 2.6 Diagram of Data Collection Process .&lt;/p&gt;
 &lt;/div&gt;
 ---
 ## Stage of System Identification
 &lt;div style="text-align: center;"&gt;
-  &lt;img src="images/training-step.png" alt="Diagram of System identification stage" style="width: auto; height: 400px;"&gt;
+  &lt;img src="images/training_process.png" alt="Diagram of System identification stage" style="width: auto; height: 350px;"&gt;
   &lt;p style="text-align: center; font-style: italic;"&gt;Figure 2.7 Diagram of Training Process .&lt;/p&gt;
 &lt;/div&gt;
 ---
 ## Stage of Concatenating Residual Dynamics
 &lt;div style="text-align: center;"&gt;
-  &lt;img src="images/fusing-step.png" alt="Diagram of System concatenating stage" style="width: auto; height: 350px;"&gt;
+  &lt;img src="images/nominal_data_driven.png" alt="Diagram of System concatenating stage" style="width: auto; height: 350px;"&gt;
   &lt;p style="text-align: center; font-style: italic;"&gt;Figure 2.8 Diagram of fusing Nominal Model with Data-driven model .&lt;/p&gt;
 &lt;/div&gt;
 ---
@@ -307,30 +302,26 @@ document.currentScript.previousElementSibling.querySelector('video').playbackRat
 &lt;/div&gt;
 ---
 **Compare MPPI performance nominal model vs learned model**
-&lt;div style="max-width: 1000px; margin: 0 auto;"&gt;
-  &lt;div style="display: flex; justify-content: space-between; margin-top: 20px;"&gt;
-    &lt;div style="width: 48%; text-align: center;"&gt;
-      &lt;img src="images/state_reference_and_feedback_mppi.png" alt="Nominal Model" style="width: auto; height: 250px; max-width: 100%;"&gt;
-      &lt;p style="text-align: center; font-style: italic;"&gt;Figure 3.8 State reference and state feedback using Nominal Model&lt;/p&gt;
-    &lt;/div&gt;
-    &lt;div style="width: 48%; text-align: center;"&gt;
-      &lt;img src="images/state_reference_and_feedback_mppi_dnn.png" alt="Nominal Model with Data-Driven Model" style="width: auto; height: 250px; max-width: 100%;"&gt;
-      &lt;p style="text-align: center; font-style: italic;"&gt;Figure 3.9 State reference and state feedback using Nominal Model fused with Data Driven Model&lt;/p&gt;
-    &lt;/div&gt;
+&lt;div style="display: flex; justify-content: space-between;"&gt;
+  &lt;div style="flex: 1;"&gt;
+    &lt;img src="images/state_reference_and_feedback_mppi.png" alt="" style="width: auto; height: 300px;"&gt;
+    &lt;p style="text-align: center; font-style: italic;"&gt;Figure 3.8 State reference and state feedback using Nominal Model&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div style="flex: 1;"&gt;
+    &lt;img src="images/state_reference_and_feedback_mppi_dnn.png" alt="" style="width: auto; height: 300px;"&gt;
+    &lt;p style="text-align: center; font-style: italic;"&gt;Figure 3.9 State reference and state feedback using Nominal Model fused with Data Driven Model&lt;/p&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 ---
 **Compare MPPI performance nominal model vs learned model**
-&lt;div style="max-width: 1000px; margin: 0 auto;"&gt;
-  &lt;div style="display: flex; justify-content: space-between; margin-top: 20px;"&gt;
-    &lt;div style="width: 48%; text-align: center;"&gt;
-      &lt;img src="images/mppi_control_inputs_smooth.png" alt="Input Control of Nominal Model" style="width: auto; height: 250px; max-width: 100%;"&gt;
-      &lt;p style="text-align: center; font-style: italic;"&gt;Figure 3.10 Input Control of Nominal Model&lt;/p&gt;
-    &lt;/div&gt;
-    &lt;div style="width: 48%; text-align: center;"&gt;
-      &lt;img src="images/mppi_control_inputs_smooth_dnn.png" alt="Input Control of Nominal Model with Data-Driven Model" style="width: auto; height: 250px; max-width: 100%;"&gt;
-      &lt;p style="text-align: center; font-style: italic;"&gt;Figure 3.11 Input Control of Nominal Model fused with Data Driven Model&lt;/p&gt;
-    &lt;/div&gt;
+&lt;div style="display: flex; justify-content: space-between;"&gt;
+  &lt;div style="flex: 1;"&gt;
+    &lt;img src="images/mppi_control_inputs_smooth.png" alt="" style="width: auto; height: 300px;"&gt;
+    &lt;p style="text-align: center; font-style: italic;"&gt;Figure 3.10 Input Control of Nominal Model&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div style="flex: 1;"&gt;
+    &lt;img src="images/mppi_control_inputs_smooth_dnn.png" alt="" style="width: auto; height: 300px;"&gt;
+    &lt;p style="text-align: center; font-style: italic;"&gt;Figure 3.11 Input Control of Nominal Model fused with Data Driven Model&lt;/p&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 ---
@@ -350,9 +341,26 @@ document.currentScript.previousElementSibling.querySelector('video').playbackRat
   &lt;/div&gt;
 &lt;/div&gt;
 ---
-# In Conclusion and Future work
-
-The study presents a high-performance control approach combining Deep Neural Networks with Model Predictive Control (MPC) and Model Predictive Path Integral (MPPI). This method effectively captures complex system dynamics in noisy environments, outperforming traditional nominal equation-based control. While the approach shows significant potential, it currently requires substantial computational resources. Future development should focus on deploying this technique in real-time hardware, utilizing simulation tools like Nvidia's Omniverse for data collection, and implementing it on GPU-enabled devices such as Nvidia's Jetson for practical robotic applications.
+# Conclusion and Future work
+** Conclusion ** &lt;br&gt;
+The study presents a high-performance control approach combining Deep Neural Networks with Model Predictive Control (MPC) and Model Predictive Path Integral (MPPI). This method effectively captures complex system dynamics in noisy environments, outperforming traditional nominal equation-based control. While the approach shows significant potential, it currently requires substantial computational resources.
+---
+** Future Work ** 
+Future development should focus on deploying this technique in real-time hardware, utilizing simulation tools like Nvidia's Omniverse for data collection, and implementing it on GPU-enabled devices such as Nvidia's Jetson and ROS2 framework for practical robotic applications.
+&lt;div style="display: flex; justify-content: space-between;"&gt;
+  &lt;div style="width: 32%; text-align: center;"&gt;
+    &lt;img src="images/omniverse.png" alt="Image 1" style="height: 300px; width: auto;"&gt;
+    &lt;p&gt;Omnivere Simulation SDK&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div style="width: 32%; text-align: center;"&gt;
+    &lt;img src="images/jetson_orin.png" alt="Image 2" style="height: 300px; width: auto;"&gt;
+    &lt;p&gt;NVIDIA Jetson Nano&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div style="width: 32%; text-align: center;"&gt;
+    &lt;img src="images/ros2_iron.png" alt="Image 3" style="height: 300px; width: auto;"&gt;
+    &lt;p&gt;ROS Iron Irwin&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
 ---
 # References
 [1] Williams, Grady, Drews, Paul, Goldfain, Brian, c("Rehg, James", "Rehg, M."), c("Theodorou, Evangelos", "Theodorou, A."). "Information Theoretic Model Predictive Control: Theory and Applications to Autonomous Driving". 2017. 
@@ -387,32 +395,35 @@ The study presents a high-performance control approach combining Deep Neural Net
 ---
 
 # Appendix
-&lt;div style="display: flex; justify-content: space-between; font-size: 1.3em;"&gt;
+&lt;div style="display: flex; justify-content: space-between; font-size: 0.9em;"&gt;
   &lt;div style="width: 48%;"&gt;
-    &lt;p style="text-align: center; font-weight: bold; font-size: 1.2em; margin-bottom: 20px;"&gt;Runge-Kutta Method&lt;/p&gt;
+    &lt;p style="text-align: center; font-weight: bold; font-size: 1em;"&gt;Runge-Kutta Method&lt;/p&gt;
     \begin{align*}
-    k_1 &amp;= f(t, y) \\[5pt]
-    k_2 &amp;= f\left(t + \frac{\Delta t}{2}, y + \frac{\Delta t}{2} \cdot k_1\right) \\[5pt]
-    k_3 &amp;= f\left(t + \frac{\Delta t}{2}, y + \frac{\Delta t}{2} \cdot k_2\right) \\[5pt]
-    k_4 &amp;= f(t + \Delta t, y + \Delta t \cdot k_3) \\[5pt]
+    \scriptsize
+    k_1 &amp;= f(t, y) \\
+    k_2 &amp;= f\left(t + \frac{\Delta t}{2}, y + \frac{\Delta t}{2} \cdot k_1\right) \\
+    k_3 &amp;= f\left(t + \frac{\Delta t}{2}, y + \frac{\Delta t}{2} \cdot k_2\right) \\
+    k_4 &amp;= f(t + \Delta t, y + \Delta t \cdot k_3) \\
     y(t + \Delta t) &amp;= y(t) + \frac{\Delta t}{6} (k_1 + 2k_2 + 2k_3 + k_4)
     \end{align*}
   &lt;/div&gt;
   &lt;div style="width: 48%;"&gt;
-    &lt;p style="text-align: center; font-weight: bold; font-size: 1.2em; margin-bottom: 20px;"&gt;Obstacle Avoidance&lt;/p&gt;
+    &lt;p style="text-align: center; font-weight: bold; font-size: 1em;"&gt;Obstacle Avoidance&lt;/p&gt;
     \begin{equation*}
+    \scriptsize
     \left(x_{\text{robot}}-x_{\text{obstacle}} \right)^{2} + \\
     \left(y_{\text{robot}}-y_{\text{obstacle}} \right)^{2} \geq{r^{2} + s^{2}}
     \end{equation*}
   &lt;/div&gt;
 &lt;/div&gt;
 ---
-&lt;div style="display: flex; justify-content: space-between; width: 90%;"&gt;
+&lt;div style="display: flex; justify-content: space-between; width: 90%; font-size: 0.9em;"&gt;
   &lt;div style="width: 48%;"&gt;
-    &lt;p style="text-align: center; font-weight: bold; font-size: 1.2em; margin-bottom: 15px;"&gt;MPC&lt;/p&gt;
+    &lt;p style="text-align: center; font-weight: bold; font-size: 1em;"&gt;MPC&lt;/p&gt;
     \begin{align*}
+    \scriptsize
     \min_{u_{0:N-1}} &amp;\sum_{k=0}^{N-1}(x_{k,ref}-x_{k})^TQ(x_{k,ref}-x_{k})+ \\
-    &amp;(u_{k,ref}-u_{k})^TR(u_{k,ref}-u_{k}) + \phi(x_N) \\[8pt]
+    &amp;(u_{k,ref}-u_{k})^TR(u_{k,ref}-u_{k}) + \phi(x_N) \\[6pt]
     \text{s.t.:} \quad &amp; x_{k+1} = f(x_k, u_k) \\
     &amp; g(x_k, x_k) \leq 0 \\
     &amp; h(x_k, x_k) \leq 0 \\
@@ -421,19 +432,20 @@ The study presents a high-performance control approach combining Deep Neural Net
     \end{align*}
   &lt;/div&gt;
   &lt;div style="width: 48%;"&gt;
-    &lt;p style="text-align: center; font-weight: bold; font-size: 1.2em; margin-bottom: 15px;"&gt;MPPI&lt;/p&gt;
+    &lt;p style="text-align: center; font-weight: bold; font-size: 1em;"&gt;MPPI&lt;/p&gt;
     \begin{align*}
+    \scriptsize
     w(V) &amp;= \frac{1}{\eta} \exp\left(
     -\frac{1}{\lambda}( S(V) + \lambda(1-\alpha) \sum_{t=0}^{T-1}u_{t}^T\Sigma^{-1}(u_{t}+\epsilon_{t}) - \rho )
-    \right) \\[8pt]
+    \right) \\[6pt]
     \eta &amp;= \sum_{k=1}^{K} \exp \left( 
     -\frac{1}{\lambda}( 
     S(U+\varepsilon_{k}) + \lambda(1-\alpha) \sum_{t=0}^{T-1}u_{t}^T\Sigma^{-1}(u_{t}+\epsilon_{t}^k) - \rho
     )
-    \right) \\[8pt]
+    \right) \\[6pt]
     \rho &amp;= \min_{k}( 
     S(V_{k}) + \lambda(1-\alpha) \sum_{t=0}^{T-1}u_{t}^T\Sigma^{-1}(u_{t}+\epsilon_{t}^k)
-    ) \\[8pt]
+    ) \\[6pt]
     u_{t}^{i+1} &amp;= u_{t}^{i} + \sum_{k=1}^{K}w(V_{k})\epsilon_{t}^k
     \end{align*}
   &lt;/div&gt;
