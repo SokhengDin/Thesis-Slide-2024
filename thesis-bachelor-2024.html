@@ -148,9 +148,11 @@ class: center, middle, title-slide
 .ministry[Ministry of Education Youth and Sport]
 .department[Department of Electrical and Energy Engineering]
 
-.advisor[SENG Theara]
-.author[DIN Sokheng]
-.date[28-June-2024]
+&lt;div class="info-group"&gt;
+  &lt;div class="advisor"&gt;SENG Theara&lt;/div&gt;
+  &lt;div class="author"&gt;DIN Sokheng&lt;/div&gt;
+  &lt;div class="date"&gt;09 July 2024&lt;/div&gt;
+&lt;/div&gt;
 
 ---
 
@@ -184,10 +186,12 @@ Model Predictive Control (MPC) is an optimal control method, that is currently v
 &lt;/div&gt;
 ---
 ## Discrete the system model with Runge-Kutta 4th order
-&lt;div style="text-align: center;"&gt;
-  &lt;img src="images/runge-kutta.png" alt="Diagram of System identification stage" style="width: auto; height: 400px;"&gt;
-  &lt;p style="text-align: center; font-style: italic;"&gt;Figure 2.3 Runge-Kutta 4th order approximator .&lt;/p&gt;
-&lt;/div&gt;
+Runge-Kutta  4th order method can be used as an approximator of the system, it enhances the prediction accuracy of the system dynamics within the control horizon of the MPC
+
+&lt;div style="flex: 1; text-align: center;"&gt;
+            &lt;img src="images/runge-kutta.png" alt="Diagram of System identification stage" style="max-width: 50%; height: auto;"&gt;
+            &lt;p style="font-style: italic;"&gt;Figure 2.3 Runge-Kutta 4th order approximator.&lt;/p&gt;
+        &lt;/div&gt;
 ---
 ## Model Predictive Path Integral
 Model Predictive Path Integral(MPPI) is an upgrade control strategy over MPC. It combines the concepts from Model Predictive Control(MPC) and stochastic optimal control. The original paper Williams, Drews, Goldfain, Rehg, and Theodorou (2017) was developed based on the information theoretic that help measure the statistic value of the sampling, that can be matched the optimal control law.
@@ -205,30 +209,24 @@ To perform obstacle avoidance, it is necessary to have a well understanding of t
 ---
 ## Stage of System Identification
 &lt;div style="text-align: center;"&gt;
-  &lt;img src="images/data_collect.png" alt="Diagram of System identification stage" style="width: auto; height: 400px;"&gt;
+  &lt;img src="images/data-collection-step.png" alt="Diagram of System identification stage" style="width: auto; height: 400px;"&gt;
   &lt;p style="text-align: center; font-style: italic;"&gt;Figure 2.6 Diagram of Data Collection Process .&lt;/p&gt;
 &lt;/div&gt;
 ---
 ## Stage of System Identification
 &lt;div style="text-align: center;"&gt;
-  &lt;img src="images/training_step.png" alt="Diagram of System identification stage" style="width: auto; height: 400px;"&gt;
+  &lt;img src="images/training-step.png" alt="Diagram of System identification stage" style="width: auto; height: 400px;"&gt;
   &lt;p style="text-align: center; font-style: italic;"&gt;Figure 2.7 Diagram of Training Process .&lt;/p&gt;
 &lt;/div&gt;
 ---
 ## Stage of Concatenating Residual Dynamics
 &lt;div style="text-align: center;"&gt;
-  &lt;img src="images/learned_sys.png" alt="Diagram of System concatenating stage" style="width: auto; height: 350px;"&gt;
+  &lt;img src="images/fusing-step.png" alt="Diagram of System concatenating stage" style="width: auto; height: 350px;"&gt;
   &lt;p style="text-align: center; font-style: italic;"&gt;Figure 2.8 Diagram of fusing Nominal Model with Data-driven model .&lt;/p&gt;
 &lt;/div&gt;
 ---
 # Result and Discussion
-**Design Deep Neural Network** &lt;br&gt;
-Data is collected using MPC and MPPI controllers, then processed with a 5-layer Deep Neural Network using Tanh activation.
-&lt;div style="text-align: center;"&gt;
-  &lt;img src="images/dnn_drawing.png" alt="DNN 5 MLPS" style="width: auto; height: 250px;"&gt;
-  &lt;p style="text-align: center; font-style: italic;"&gt;Figure 3.1 Neural Network Model.&lt;/p&gt;
-&lt;/div&gt;
----
+
 ## Model Predictive Control with Learned Dyanmcis using Acados
 **Training Neural Network**
 &lt;div style="text-align: center;"&gt;
@@ -386,6 +384,60 @@ The study presents a high-performance control approach combining Deep Neural Net
 [11] Gao, Wenbo, Pan, Muxuan, Zhou, Wenxiang, Lu, Feng, Huang, Jin-Quan. "Aero-Engine Modeling and Control Method with Model-Based Deep Reinforcement Learning". 2023. Aerospace. Vol. 10. No. 3. DOI: 10.3390/aerospace10030209.
 
 [12] Nagabandi, Anusha, Yang, Guangzhao, Asmar, Thomas, Pandya, Ravi, Kahn, Gregory, Levine, Sergey, c("Fearing, Ronald", "Fearing, S."). "Learning Image-Conditioned Dynamics Models for Control of Under-actuated Legged Millirobots". 2018. 
+---
+
+# Appendix
+&lt;div style="display: flex; justify-content: space-between; font-size: 1.3em;"&gt;
+  &lt;div style="width: 48%;"&gt;
+    &lt;p style="text-align: center; font-weight: bold; font-size: 1.2em; margin-bottom: 20px;"&gt;Runge-Kutta Method&lt;/p&gt;
+    \begin{align*}
+    k_1 &amp;= f(t, y) \\[5pt]
+    k_2 &amp;= f\left(t + \frac{\Delta t}{2}, y + \frac{\Delta t}{2} \cdot k_1\right) \\[5pt]
+    k_3 &amp;= f\left(t + \frac{\Delta t}{2}, y + \frac{\Delta t}{2} \cdot k_2\right) \\[5pt]
+    k_4 &amp;= f(t + \Delta t, y + \Delta t \cdot k_3) \\[5pt]
+    y(t + \Delta t) &amp;= y(t) + \frac{\Delta t}{6} (k_1 + 2k_2 + 2k_3 + k_4)
+    \end{align*}
+  &lt;/div&gt;
+  &lt;div style="width: 48%;"&gt;
+    &lt;p style="text-align: center; font-weight: bold; font-size: 1.2em; margin-bottom: 20px;"&gt;Obstacle Avoidance&lt;/p&gt;
+    \begin{equation*}
+    \left(x_{\text{robot}}-x_{\text{obstacle}} \right)^{2} + \\
+    \left(y_{\text{robot}}-y_{\text{obstacle}} \right)^{2} \geq{r^{2} + s^{2}}
+    \end{equation*}
+  &lt;/div&gt;
+&lt;/div&gt;
+---
+&lt;div style="display: flex; justify-content: space-between; width: 90%;"&gt;
+  &lt;div style="width: 48%;"&gt;
+    &lt;p style="text-align: center; font-weight: bold; font-size: 1.2em; margin-bottom: 15px;"&gt;MPC&lt;/p&gt;
+    \begin{align*}
+    \min_{u_{0:N-1}} &amp;\sum_{k=0}^{N-1}(x_{k,ref}-x_{k})^TQ(x_{k,ref}-x_{k})+ \\
+    &amp;(u_{k,ref}-u_{k})^TR(u_{k,ref}-u_{k}) + \phi(x_N) \\[8pt]
+    \text{s.t.:} \quad &amp; x_{k+1} = f(x_k, u_k) \\
+    &amp; g(x_k, x_k) \leq 0 \\
+    &amp; h(x_k, x_k) \leq 0 \\
+    &amp; p(x_k) \leq 0 \\
+    &amp; x_0 = x(0)
+    \end{align*}
+  &lt;/div&gt;
+  &lt;div style="width: 48%;"&gt;
+    &lt;p style="text-align: center; font-weight: bold; font-size: 1.2em; margin-bottom: 15px;"&gt;MPPI&lt;/p&gt;
+    \begin{align*}
+    w(V) &amp;= \frac{1}{\eta} \exp\left(
+    -\frac{1}{\lambda}( S(V) + \lambda(1-\alpha) \sum_{t=0}^{T-1}u_{t}^T\Sigma^{-1}(u_{t}+\epsilon_{t}) - \rho )
+    \right) \\[8pt]
+    \eta &amp;= \sum_{k=1}^{K} \exp \left( 
+    -\frac{1}{\lambda}( 
+    S(U+\varepsilon_{k}) + \lambda(1-\alpha) \sum_{t=0}^{T-1}u_{t}^T\Sigma^{-1}(u_{t}+\epsilon_{t}^k) - \rho
+    )
+    \right) \\[8pt]
+    \rho &amp;= \min_{k}( 
+    S(V_{k}) + \lambda(1-\alpha) \sum_{t=0}^{T-1}u_{t}^T\Sigma^{-1}(u_{t}+\epsilon_{t}^k)
+    ) \\[8pt]
+    u_{t}^{i+1} &amp;= u_{t}^{i} + \sum_{k=1}^{K}w(V_{k})\epsilon_{t}^k
+    \end{align*}
+  &lt;/div&gt;
+&lt;/div&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

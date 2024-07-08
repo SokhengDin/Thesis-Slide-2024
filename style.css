@@ -101,28 +101,42 @@ body {
   width: 100%;
 }
 
-.title-slide .author,
-.title-slide .advisor,
-.title-slide .date {
-  font-size: 24px;
-  color: #5F5F5F;
-  margin-bottom: 10px;
-  display: block;
+.title-slide .info-group {
+  text-align: center;
+  margin-top: 20px;
 }
 
-.title-slide .author::before {
-  content: "Name: ";
+.title-slide .advisor,
+.title-slide .author,
+.title-slide .date {
+  font-size: 24px;
+  color: #000000;  /* Changed to black */
+  margin: 5px 0;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.title-slide .advisor::before,
+.title-slide .author::before,
+.title-slide .date::before {
   font-weight: bold;
+  color: #000000;  /* Ensure the label is also black */
+  width: 100px;  /* Adjust this value as needed */
+  text-align: right;
+  margin-right: 10px;
 }
 
 .title-slide .advisor::before {
-  content: "Advisor Name: ";
-  font-weight: bold;
+  content: "Advisor:";
+}
+
+.title-slide .author::before {
+  content: "Name:";
 }
 
 .title-slide .date::before {
-  content: "Date: ";
-  font-weight: bold;
+  content: "Date:";
 }
 
 .title-slide h1 {
