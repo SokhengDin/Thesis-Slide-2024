@@ -19,13 +19,6 @@ output:
     seal: false
     includes:
       in_header: "toc.html"
-    powerpoint_presentation:
-    reference_doc: thesis_2024.pptx
-    slide_level: 2
-    fig_caption: true
-    keep_md: true
-    pandoc_args: 
-      - "--slide-level=2"
       
 ---
 ```{r setup, include=FALSE}
@@ -38,6 +31,8 @@ install_and_load <- function(package) {
 }
 library(plotly)
 library(deSolve)
+
+install_and_load("rlang")
 
 if (!require(reticulate)) install.packages("reticulate")
 
@@ -173,7 +168,7 @@ The Runge-Kutta 4th order method can be used as an approximator of the system, e
         </div>
 ---
 ## Path Constraint Obstacle Avoidance
-To perform obstacle avoidance, it is necessary to have a well understanding of the path constraint or constraint of our optimization problem. The most commonly used method for setting obstacle avoidance in a 2D-plane is by measuring the coordinates $(x, y)$ of the robot with respect to the coordinates $(x, y)$ of the obstacle.
+To perform obstacle avoidance, it is necessary to have a well understanding of the path constraint or constraint of our optimization problem. The most commonly used method for setting obstacle avoidance in a 2D-plane is by measuring the coordinates (x, y) of the robot with respect to the coordinates (x, y) of the obstacle.
 <div style="text-align: center;">
   <img src="images/obstacle_avoidance.png" alt="Obstacle advoidance" style="width: auto; height: 270px;">
   <p style="text-align: center; font-style: italic;">Figure 2.5 Overview of the proposed approach.</p>
@@ -352,58 +347,22 @@ split_bib(bib, chunk_size = 4)
 ---
 
 # Appendix
-<div style="display: flex; justify-content: space-between; font-size: 0.9em;">
-  <div style="width: 48%;">
-    <p style="text-align: center; font-weight: bold; font-size: 1em;">Runge-Kutta Method</p>
-    \begin{align*}
-    \scriptsize
-    k_1 &= f(t, y) \\
-    k_2 &= f\left(t + \frac{\Delta t}{2}, y + \frac{\Delta t}{2} \cdot k_1\right) \\
-    k_3 &= f\left(t + \frac{\Delta t}{2}, y + \frac{\Delta t}{2} \cdot k_2\right) \\
-    k_4 &= f(t + \Delta t, y + \Delta t \cdot k_3) \\
-    y(t + \Delta t) &= y(t) + \frac{\Delta t}{6} (k_1 + 2k_2 + 2k_3 + k_4)
-    \end{align*}
+<div style="display: flex; justify-content: space-between;">
+  <div style="flex: 1;">
+    <img src="images/runge_kutta.png" alt="" style="width: auto; height: 350px;">
   </div>
-  <div style="width: 48%;">
-    <p style="text-align: center; font-weight: bold; font-size: 1em;">Obstacle Avoidance</p>
-    \begin{equation*}
-    \scriptsize
-    \left(x_{\text{robot}}-x_{\text{obstacle}} \right)^{2} + \\
-    \left(y_{\text{robot}}-y_{\text{obstacle}} \right)^{2} \geq{r^{2} + s^{2}}
-    \end{equation*}
+  <div style="flex: 1;">
+    <img src="images/obs_avoidance.png" alt="Obstacle avoidance" style="width: auto; height: 350px;">
+
   </div>
 </div>
 ---
-<div style="display: flex; justify-content: space-between; width: 90%; font-size: 0.9em;">
-  <div style="width: 48%;">
-    <p style="text-align: center; font-weight: bold; font-size: 1em;">MPC</p>
-    \begin{align*}
-    \scriptsize
-    \min_{u_{0:N-1}} &\sum_{k=0}^{N-1}(x_{k,ref}-x_{k})^TQ(x_{k,ref}-x_{k})+ \\
-    &(u_{k,ref}-u_{k})^TR(u_{k,ref}-u_{k}) + \phi(x_N) \\[6pt]
-    \text{s.t.:} \quad & x_{k+1} = f(x_k, u_k) \\
-    & g(x_k, x_k) \leq 0 \\
-    & h(x_k, x_k) \leq 0 \\
-    & p(x_k) \leq 0 \\
-    & x_0 = x(0)
-    \end{align*}
+<div style="display: flex; justify-content: space-between;">
+  <div style="flex: 1;">
+    <img src="images/mpc.png" alt="" style="width: auto; height: 350px;">
   </div>
-  <div style="width: 48%;">
-    <p style="text-align: center; font-weight: bold; font-size: 1em;">MPPI</p>
-    \begin{align*}
-    \scriptsize
-    w(V) &= \frac{1}{\eta} \exp\left(
-    -\frac{1}{\lambda}( S(V) + \lambda(1-\alpha) \sum_{t=0}^{T-1}u_{t}^T\Sigma^{-1}(u_{t}+\epsilon_{t}) - \rho )
-    \right) \\[6pt]
-    \eta &= \sum_{k=1}^{K} \exp \left( 
-    -\frac{1}{\lambda}( 
-    S(U+\varepsilon_{k}) + \lambda(1-\alpha) \sum_{t=0}^{T-1}u_{t}^T\Sigma^{-1}(u_{t}+\epsilon_{t}^k) - \rho
-    )
-    \right) \\[6pt]
-    \rho &= \min_{k}( 
-    S(V_{k}) + \lambda(1-\alpha) \sum_{t=0}^{T-1}u_{t}^T\Sigma^{-1}(u_{t}+\epsilon_{t}^k)
-    ) \\[6pt]
-    u_{t}^{i+1} &= u_{t}^{i} + \sum_{k=1}^{K}w(V_{k})\epsilon_{t}^k
-    \end{align*}
+  <div style="flex: 1;">
+    <img src="images/mppi.png" alt="Obstacle avoidance" style="width: auto; height: 350px;">
+
   </div>
 </div>

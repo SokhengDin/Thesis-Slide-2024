@@ -229,7 +229,7 @@ The Runge-Kutta 4th order method can be used as an approximator of the system, e
         &lt;/div&gt;
 ---
 ## Path Constraint Obstacle Avoidance
-To perform obstacle avoidance, it is necessary to have a well understanding of the path constraint or constraint of our optimization problem. The most commonly used method for setting obstacle avoidance in a 2D-plane is by measuring the coordinates `\((x, y)\)` of the robot with respect to the coordinates `\((x, y)\)` of the obstacle.
+To perform obstacle avoidance, it is necessary to have a well understanding of the path constraint or constraint of our optimization problem. The most commonly used method for setting obstacle avoidance in a 2D-plane is by measuring the coordinates (x, y) of the robot with respect to the coordinates (x, y) of the obstacle.
 &lt;div style="text-align: center;"&gt;
   &lt;img src="images/obstacle_avoidance.png" alt="Obstacle advoidance" style="width: auto; height: 270px;"&gt;
   &lt;p style="text-align: center; font-style: italic;"&gt;Figure 2.5 Overview of the proposed approach.&lt;/p&gt;
@@ -434,59 +434,23 @@ Thank you for your attention
 ---
 
 # Appendix
-&lt;div style="display: flex; justify-content: space-between; font-size: 0.9em;"&gt;
-  &lt;div style="width: 48%;"&gt;
-    &lt;p style="text-align: center; font-weight: bold; font-size: 1em;"&gt;Runge-Kutta Method&lt;/p&gt;
-    \begin{align*}
-    \scriptsize
-    k_1 &amp;= f(t, y) \\
-    k_2 &amp;= f\left(t + \frac{\Delta t}{2}, y + \frac{\Delta t}{2} \cdot k_1\right) \\
-    k_3 &amp;= f\left(t + \frac{\Delta t}{2}, y + \frac{\Delta t}{2} \cdot k_2\right) \\
-    k_4 &amp;= f(t + \Delta t, y + \Delta t \cdot k_3) \\
-    y(t + \Delta t) &amp;= y(t) + \frac{\Delta t}{6} (k_1 + 2k_2 + 2k_3 + k_4)
-    \end{align*}
+&lt;div style="display: flex; justify-content: space-between;"&gt;
+  &lt;div style="flex: 1;"&gt;
+    &lt;img src="images/runge_kutta.png" alt="" style="width: auto; height: 350px;"&gt;
   &lt;/div&gt;
-  &lt;div style="width: 48%;"&gt;
-    &lt;p style="text-align: center; font-weight: bold; font-size: 1em;"&gt;Obstacle Avoidance&lt;/p&gt;
-    \begin{equation*}
-    \scriptsize
-    \left(x_{\text{robot}}-x_{\text{obstacle}} \right)^{2} + \\
-    \left(y_{\text{robot}}-y_{\text{obstacle}} \right)^{2} \geq{r^{2} + s^{2}}
-    \end{equation*}
+  &lt;div style="flex: 1;"&gt;
+    &lt;img src="images/obs_avoidance.png" alt="Obstacle avoidance" style="width: auto; height: 350px;"&gt;
+
   &lt;/div&gt;
 &lt;/div&gt;
 ---
-&lt;div style="display: flex; justify-content: space-between; width: 90%; font-size: 0.9em;"&gt;
-  &lt;div style="width: 48%;"&gt;
-    &lt;p style="text-align: center; font-weight: bold; font-size: 1em;"&gt;MPC&lt;/p&gt;
-    \begin{align*}
-    \scriptsize
-    \min_{u_{0:N-1}} &amp;\sum_{k=0}^{N-1}(x_{k,ref}-x_{k})^TQ(x_{k,ref}-x_{k})+ \\
-    &amp;(u_{k,ref}-u_{k})^TR(u_{k,ref}-u_{k}) + \phi(x_N) \\[6pt]
-    \text{s.t.:} \quad &amp; x_{k+1} = f(x_k, u_k) \\
-    &amp; g(x_k, x_k) \leq 0 \\
-    &amp; h(x_k, x_k) \leq 0 \\
-    &amp; p(x_k) \leq 0 \\
-    &amp; x_0 = x(0)
-    \end{align*}
+&lt;div style="display: flex; justify-content: space-between;"&gt;
+  &lt;div style="flex: 1;"&gt;
+    &lt;img src="images/mpc.png" alt="" style="width: auto; height: 350px;"&gt;
   &lt;/div&gt;
-  &lt;div style="width: 48%;"&gt;
-    &lt;p style="text-align: center; font-weight: bold; font-size: 1em;"&gt;MPPI&lt;/p&gt;
-    \begin{align*}
-    \scriptsize
-    w(V) &amp;= \frac{1}{\eta} \exp\left(
-    -\frac{1}{\lambda}( S(V) + \lambda(1-\alpha) \sum_{t=0}^{T-1}u_{t}^T\Sigma^{-1}(u_{t}+\epsilon_{t}) - \rho )
-    \right) \\[6pt]
-    \eta &amp;= \sum_{k=1}^{K} \exp \left( 
-    -\frac{1}{\lambda}( 
-    S(U+\varepsilon_{k}) + \lambda(1-\alpha) \sum_{t=0}^{T-1}u_{t}^T\Sigma^{-1}(u_{t}+\epsilon_{t}^k) - \rho
-    )
-    \right) \\[6pt]
-    \rho &amp;= \min_{k}( 
-    S(V_{k}) + \lambda(1-\alpha) \sum_{t=0}^{T-1}u_{t}^T\Sigma^{-1}(u_{t}+\epsilon_{t}^k)
-    ) \\[6pt]
-    u_{t}^{i+1} &amp;= u_{t}^{i} + \sum_{k=1}^{K}w(V_{k})\epsilon_{t}^k
-    \end{align*}
+  &lt;div style="flex: 1;"&gt;
+    &lt;img src="images/mppi.png" alt="Obstacle avoidance" style="width: auto; height: 350px;"&gt;
+
   &lt;/div&gt;
 &lt;/div&gt;
     </textarea>
