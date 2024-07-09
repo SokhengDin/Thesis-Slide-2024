@@ -339,6 +339,12 @@ Future development should focus on deploying this technique in real-time hardwar
   </div>
 </div>
 ---
+# thankyou
+<style>
+.thankyou-slide { --thankyou-margin-top: 30vh; }
+</style>
+Thank you for your attention
+---
 # References
 ```{r results='asis', echo=FALSE}
 split_bib(bib, chunk_size = 4)

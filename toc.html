@@ -15,8 +15,10 @@ var generateTOC = function() {
     $slide.find('h1').each(function() {
       var $header = $(this);
       var headerText = $header.text().trim();
-      var sectionTitle = headerText.replace(/^[IVX]+\.\s*/, '');
-      if (sectionTitle !== prevSectionTitle) {
+      var sectionTitle = headerText.replace(/^[IVX]+\.\s*/, '').trim();
+      
+      // Exclude "References" and "Appendix"
+      if (sectionTitle !== "References" && sectionTitle !== "Appendix" && sectionTitle !== prevSectionTitle) {
         prevSectionTitle = sectionTitle;
         toc += '<li><a href="#' + (index + 1) + '">' + sectionTitle + '</a></li>';
       }
@@ -27,76 +29,107 @@ var generateTOC = function() {
   $('.toc').html(toc);
 };
   
-  var updateSlideNumbers = function() {
-    var sectionCount = 0;
-    var subsectionCount = 0;
-    var subsubsectionCount = 0;
-    var currentSectionTitle = '';
-    var currentSectionNumber = '';
-    var currentSubsectionTitle = '';
-    var currentSubsubsectionTitle = '';
+var updateSlideNumbers = function() {
+  var sectionCount = 0;
+  var subsectionCount = 0;
+  var subsubsectionCount = 0;
+  var currentSectionTitle = '';
+  var currentSectionNumber = '';
+  var currentSubsectionTitle = '';
+  var currentSubsubsectionTitle = '';
+  
+  $('.remark-slide-content').each(function(index, slide) {
+    var $slide = $(slide);
     
-    $('.remark-slide-content').each(function(index, slide) {
-      var $slide = $(slide);
-      
-      // Skip the title slide and the TOC slide
-      if ($slide.hasClass('title-slide') || $slide.find('h1').text().trim().toLowerCase() === 'table of contents') {
-        return;
-      }
-      
-      var $headers = $slide.find('h1, h2, h3');
-      if ($headers.length === 0) {
-        // If no headers, add the current section, subsection, and subsubsection titles
-        if (currentSectionTitle) {
-          if (currentSubsubsectionTitle) {
-            $slide.prepend('<h3 class="current-subsubsection"><span class="subsubsection-number">' + subsubsectionCount + '. </span>' + currentSubsubsectionTitle + '</h3>');
-          }
-          if (currentSubsectionTitle) {
-            $slide.prepend('<h2 class="current-subsection"><span class="subsection-number">' + subsectionCount + '. </span>' + currentSubsectionTitle + '</h2>');
-          }
-          $slide.prepend('<h1 class="parent-section"><span class="section-number">' + currentSectionNumber + ' </span>' + currentSectionTitle + '</h1>');
+    // Skip the title slide and the TOC slide
+    if ($slide.hasClass('title-slide') || $slide.find('h1').text().trim().toLowerCase() === 'table of contents') {
+      return;
+    }
+    
+    var $headers = $slide.find('h1, h2, h3');
+    if ($headers.length === 0) {
+      // If no headers, add the current section, subsection, and subsubsection titles
+      if (currentSectionTitle) {
+        if (currentSubsubsectionTitle) {
+          $slide.prepend('<h3 class="current-subsubsection"><span class="subsubsection-number">' + subsubsectionCount + '. </span>' + currentSubsubsectionTitle + '</h3>');
         }
-      } else {
-        $headers.each(function() {
-          var $header = $(this);
-          var headerText = $header.text().trim();
-          if ($header.is('h1')) {
+        if (currentSubsectionTitle) {
+          $slide.prepend('<h2 class="current-subsection"><span class="subsection-number">' + subsectionCount + '. </span>' + currentSubsectionTitle + '</h2>');
+        }
+        $slide.prepend('<h1 class="parent-section"><span class="section-number">' + currentSectionNumber + ' </span>' + currentSectionTitle + '</h1>');
+      }
+    } else {
+      $headers.each(function() {
+        var $header = $(this);
+        var headerText = $header.text().trim();
+        if ($header.is('h1')) {
+          // Check if the header is "References" or "Appendix"
+          if (headerText === 'References' || headerText === 'Appendix') {
+            $header.html(headerText); // Remove any existing numbering
+            currentSectionTitle = '';
+            currentSectionNumber = '';
+            currentSubsectionTitle = '';
+            currentSubsubsectionTitle = '';
+          } else if (headerText.toLowerCase() === 'thankyou') {
+            // For "thankyou", add a class to the slide and remove the header
+            $slide.addClass('thankyou-slide');
+            $header.remove();
+            currentSectionTitle = '';
+            currentSectionNumber = '';
+            currentSubsectionTitle = '';
+            currentSubsubsectionTitle = '';
+          } else {
             sectionCount++;
             subsectionCount = 0;
             subsubsectionCount = 0;
-            currentSectionTitle = headerText;
+            currentSectionTitle = headerText.replace(/^[IVX]+\.\s*/, ''); // Remove any existing Roman numeral
             currentSectionNumber = romanize(sectionCount) + '.';
             currentSubsectionTitle = '';
             currentSubsubsectionTitle = '';
-            $header.html('<span class="section-number">' + currentSectionNumber + ' </span>' + headerText);
-          } else if ($header.is('h2')) {
-            subsectionCount++;
-            subsubsectionCount = 0;
-            currentSubsectionTitle = headerText;
-            currentSubsubsectionTitle = '';
-            if (!$header.prev().is('h1')) {
-              $header.before('<h1 class="parent-section"><span class="section-number">' + currentSectionNumber + ' </span>' + currentSectionTitle + '</h1>');
-            }
-            $header.html('<span class="subsection-number">' + subsectionCount + '. </span>' + headerText);
-          } else if ($header.is('h3')) {
-            subsubsectionCount++;
-            currentSubsubsectionTitle = headerText;
-            if (!$header.prev().is('h2')) {
-              $header.before('<h2 class="parent-subsection"><span class="subsection-number">' + subsectionCount + '. </span>' + currentSubsectionTitle + '</h2>');
-            }
-            if (!$header.prev().prev().is('h1')) {
-              $header.before('<h1 class="parent-section"><span class="section-number">' + currentSectionNumber + ' </span>' + currentSectionTitle + '</h1>');
-            }
-            $header.html('<span class="subsubsection-number">' + subsubsectionCount + '. </span>' + headerText);
+            $header.html('<span class="section-number">' + currentSectionNumber + ' </span>' + currentSectionTitle);
           }
-        });
-      }
-      
-      // Move all content after the headers
-      var $content = $slide.contents().not('h1, h2, h3').detach();
-      $slide.append($content);
-    });
-  };
+        } else if ($header.is('h2')) {
+          subsectionCount++;
+          subsubsectionCount = 0;
+          currentSubsectionTitle = headerText;
+          currentSubsubsectionTitle = '';
+          if (!$header.prev().is('h1')) {
+            $header.before('<h1 class="parent-section"><span class="section-number">' + currentSectionNumber + ' </span>' + currentSectionTitle + '</h1>');
+          }
+          $header.html('<span class="subsection-number">' + subsectionCount + '. </span>' + headerText);
+        } else if ($header.is('h3')) {
+          subsubsectionCount++;
+          currentSubsubsectionTitle = headerText;
+          if (!$header.prev().is('h2')) {
+            $header.before('<h2 class="parent-subsection"><span class="subsection-number">' + subsectionCount + '. </span>' + currentSubsectionTitle + '</h2>');
+          }
+          if (!$header.prev().prev().is('h1')) {
+            $header.before('<h1 class="parent-section"><span class="section-number">' + currentSectionNumber + ' </span>' + currentSectionTitle + '</h1>');
+          }
+          $header.html('<span class="subsubsection-number">' + subsubsectionCount + '. </span>' + headerText);
+        }
+      });
+    }
+    
+    // Move all content after the headers
+    var $content = $slide.contents().not('h1, h2, h3').detach();
+    $slide.append($content);
+  });
+};
+
+// Function to convert numbers to Roman numerals
+function romanize(num) {
+  var lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1},
+      roman = '',
+      i;
+  for (i in lookup) {
+    while (num >= lookup[i]) {
+      roman += i;
+      num -= lookup[i];
+    }
+  }
+  return roman;
+}
   
   // Function to convert numbers to Roman numerals
   function romanize(num) {

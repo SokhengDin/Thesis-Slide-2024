@@ -30,6 +30,36 @@
   color: #1a5173;
   text-decoration: none;
 }
+
+
+.toc-number {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.remark-slide-content h1.unnumbered:before {
+  content: none !important;
+}
+
+.remark-slide-content h1.unnumbered {
+  padding-left: 0 !important;
+}
+
+.thankyou-slide {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  height: 100% !important;
+  --thankyou-margin-top: 40vh; /* Default value, can be overridden */
+}
+
+.thankyou-slide p {
+  font-size: 48px !important;
+  text-align: center !important;
+  margin-top: var(--thankyou-margin-top) !important;
+}
+
+
 /* Common styles */
 body {
   font-family: 'Times New Roman', Times, serif;
